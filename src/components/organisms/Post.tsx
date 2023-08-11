@@ -69,6 +69,7 @@ const StyledPost = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+    padding-right: 20px;
   }
 
   .postHeaderDescription {
