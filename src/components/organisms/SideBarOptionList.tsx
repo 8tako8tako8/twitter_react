@@ -14,11 +14,9 @@ export const SideBarOptionList: FC = () => {
   return (
     <StyledSideBarOptionList>
       <SideBarOption text="ホーム" Icon={HomeIcon} />
-      <SideBarOption text="話題を検索" Icon={SearchIcon} />
       <SideBarOption text="通知" Icon={NotificationsNoneIcon} />
       <SideBarOption text="メッセージ" Icon={MailOutlineIcon} />
       <SideBarOption text="ブックマーク" Icon={BookmarkBorderIcon} />
-      <SideBarOption text="リスト" Icon={ListAltIcon} />
       <SideBarOption text="プロフィール" Icon={PermIdentityIcon} />
       <SideBarOption text="もっとみる" Icon={MoreHorizIcon} />
     </StyledSideBarOptionList>
