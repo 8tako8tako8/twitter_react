@@ -1,4 +1,6 @@
 import { FC } from 'react'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import { Button } from '@mui/material'
 
 import styled from 'styled-components'
 import { SideBarOptionList } from '../organisms/SideBarOptionList'
@@ -6,23 +8,16 @@ import { SideBarOptionList } from '../organisms/SideBarOptionList'
 export const SideBar: FC = () => {
   return (
     <StyledSideBar>
-      <div className="sideBar">
-        <SideBarOptionList />
-      </div>
+      <TwitterIcon className="sideBarTwitterIcon" />
+      <SideBarOptionList />
+      <Button variant="outlined" className="sideBarTweet" fullWidth>
+        ツイートする
+      </Button>
     </StyledSideBar>
   )
 }
 
 const StyledSideBar = styled.div`
-  .sideBar {
-    border-right: 1px solid var(--twitter-background);
-    flex: 0.2;
-    min-width: 250px;
-    margin-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
   .sideBarTwitterIcon {
     color: var(--twitter-color);
     font-size: 30px !important;
