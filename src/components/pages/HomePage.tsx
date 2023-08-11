@@ -29,7 +29,7 @@ const StyledHomePage = styled.div`
 
   .sideBar {
     border-right: 1px solid var(--twitter-background);
-    min-width: 300px;
+    min-width: 250px;
     margin-top: 20px;
     padding-left: 20px;
     padding-right: 20px;

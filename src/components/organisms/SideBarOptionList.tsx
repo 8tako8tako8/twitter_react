@@ -1,12 +1,10 @@
 import { FC } from 'react'
 import { SideBarOption } from '../molecules/SideBarOption'
 import HomeIcon from '@mui/icons-material/Home'
-import SearchIcon from '@mui/icons-material/Search'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import styled from 'styled-components'
-import ListAltIcon from '@mui/icons-material/ListAlt'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 

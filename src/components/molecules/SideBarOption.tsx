@@ -24,7 +24,7 @@ const StyledSideBarOption = styled.div`
     align-items: center;
     cursor: pointer;
     transition: color 0.15s ease-out;
-    margin-left: 20px;
+    padding-left: 20px;
   }
 
   .sideBarOption:hover {
@@ -38,7 +38,7 @@ const StyledSideBarOption = styled.div`
   }
 
   .sideBarOption > h2 {
-    font-size: 20px;
+    font-size: 24px;
     margin-right: 20px;
     font-weight: 800;
   }
