@@ -1,7 +1,6 @@
 import {
   ChatBubbleOutline,
   FavoriteBorder,
-  PublishOutlined,
   Repeat,
   VerifiedUser,
 } from '@mui/icons-material'
@@ -31,12 +30,11 @@ export const Post: FC = () => {
               <p>ツイート内容です</p>
             </div>
           </div>
-          {/* <img src="https://source.unsplash.com/random" /> */}
+          <img src="https://source.unsplash.com/random" />
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
             <Repeat fontSize="small" />
             <FavoriteBorder fontSize="small" />
-            <PublishOutlined fontSize="small" />
           </div>
         </div>
       </div>
@@ -69,7 +67,8 @@ const StyledPost = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-    padding-right: 20px;
+    margin-bottom: 10px;
+    margin-right: 10px;
   }
 
   .postHeaderDescription {
