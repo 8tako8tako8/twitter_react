@@ -8,7 +8,27 @@ import { Avatar } from '@mui/material'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-export const Post: FC = () => {
+type Tweet = {
+  id: number
+  user: {
+    id: string
+    userName: string
+    displayName: string
+    avatarUrl: string
+  }
+  content: string
+  image: string
+  retweets: number
+  likes: number
+}
+
+type Props = {
+  tweet: Tweet
+}
+
+export const Post: FC<Props> = (props) => {
+  const { tweet } = props
+
   return (
     <StyledPost>
       <div className="post">
@@ -19,18 +39,18 @@ export const Post: FC = () => {
           <div className="postHeader">
             <div className="postHeaderText">
               <h3>
-                おれおれ
+                {tweet.user.displayName}
                 <span className="postHeaderSpecial">
                   <VerifiedUser className="postBadge" />
-                  @8tako8tako8
+                  {tweet.user.userName}
                 </span>
               </h3>
             </div>
             <div className="postHeaderDescription">
-              <p>ツイート内容です</p>
+              <p>{tweet.content}</p>
             </div>
           </div>
-          <img src="https://source.unsplash.com/random" />
+          {tweet.image && <img src={tweet.image} />}
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
             <Repeat fontSize="small" />

@@ -4,13 +4,15 @@ import styled from 'styled-components'
 type Props = {
   text: string
   Icon: React.ElementType
+  active: boolean
 }
 
 export const SideBarOption: FC<Props> = (props) => {
-  const { text, Icon } = props
+  const { text, Icon, active } = props
+
   return (
     <StyledSideBarOption>
-      <div className="sideBarOption">
+      <div className={`sideBarOption ${active && 'sideBarOptionActive'}`}>
         <Icon />
         <h2>{text}</h2>
       </div>
@@ -43,7 +45,7 @@ const StyledSideBarOption = styled.div`
     font-weight: 800;
   }
 
-  .sideBarOption--active {
+  .sideBarOptionActive {
     color: var(--twitter-color);
   }
 `

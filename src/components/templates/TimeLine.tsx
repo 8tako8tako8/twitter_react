@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 import { TweetBox } from '../organisms/TweetBox'
-import { Post } from '../organisms/Post'
+import { Posts } from '../organisms/Posts'
 
 export const TimeLine: FC = () => {
   return (
@@ -10,9 +10,7 @@ export const TimeLine: FC = () => {
         <h2>ホーム</h2>
       </div>
       <TweetBox />
-      <Post />
-      <Post />
-      <Post />
+      <Posts />
     </StyledTimeLine>
   )
 }

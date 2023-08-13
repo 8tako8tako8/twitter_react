@@ -12,5 +12,7 @@
     "project": "./tsconfig.json"
   },
   "env": { "browser": true, "node": true, "es6": true },
-  "rules": {}
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }

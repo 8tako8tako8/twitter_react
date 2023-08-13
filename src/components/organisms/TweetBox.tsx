@@ -1,23 +1,47 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '@mui/material'
 import { Button } from '@mui/material'
 
 export const TweetBox: FC = () => {
+  const [tweetMessage, setTweetMessage] = useState('')
+  const [tweetImage, setTweetImage] = useState('')
+
+  const sendTweet = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (tweetMessage === '') return
+
+    e.preventDefault()
+    // TODO: ツイートを送信する処理
+
+    setTweetMessage('')
+    setTweetImage('')
+  }
+
   return (
     <StyledTweetBox>
       <div className="tweetBox">
         <form>
           <div className="tweetBoxInput">
             <Avatar />
-            <input placeholder="いまどうしてる？" type="text" />
+            <input
+              value={tweetMessage}
+              placeholder="いまどうしてる？"
+              type="text"
+              onChange={(e) => setTweetMessage(e.target.value)}
+            />
           </div>
           <input
+            value={tweetImage}
             className="tweetBoxImageInput"
             placeholder="画像のURLを入力してください"
             type="text"
+            onChange={(e) => setTweetImage(e.target.value)}
           />
-          <Button className="tweetBoxTweetButton" type="submit">
+          <Button
+            className="tweetBoxTweetButton"
+            type="submit"
+            onClick={(e) => sendTweet(e)}
+          >
             ツイートする
           </Button>
         </form>
