@@ -4,16 +4,40 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react'
 import styled from 'styled-components'
+import { signUp } from '../../lib/api/auth'
+import { SignUpParams } from '../../types'
 
 export const SignUp: React.FC = () => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [passwordConfirmation, setPasswordConfirmation] = React.useState('')
 
+  const homeUrl = process.env.PUBLIC_URL
+
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault()
 
     console.log(email, password, passwordConfirmation)
+
+    const params: SignUpParams = {
+      email: email,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+      confirmSuccessURL: homeUrl + '/confirm',
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    signUp(params)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('success')
+        } else {
+          console.log('failed')
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   return (
