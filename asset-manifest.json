@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/twitter_react/static/js/main.994897ec.js",
+    "main.js": "/twitter_react/static/js/main.ad092554.js",
     "index.html": "/twitter_react/index.html",
-    "main.994897ec.js.map": "/twitter_react/static/js/main.994897ec.js.map"
+    "main.ad092554.js.map": "/twitter_react/static/js/main.ad092554.js.map"
   },
   "entrypoints": [
-    "static/js/main.994897ec.js"
+    "static/js/main.ad092554.js"
   ]
 }
