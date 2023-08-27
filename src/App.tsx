@@ -8,7 +8,6 @@ import { Error } from './components/pages/Error'
 const homeUrl = process.env.PUBLIC_URL
 
 const App: React.FC = () => {
-  console.log(homeUrl)
   return (
     <Router>
       <Routes>

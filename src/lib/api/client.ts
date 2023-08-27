@@ -9,9 +9,14 @@ const options = {
   ignoreHeaders: true,
 }
 
+const API_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_API_URL_PROD
+    : process.env.REACT_APP_API_URL_LOCAL
+
 const client = applyCaseMiddleware(
   axios.create({
-    baseURL: 'http://localhost:3100/api/v1',
+    baseURL: API_URL,
   }),
   options
 )
