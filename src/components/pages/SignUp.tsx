@@ -69,10 +69,10 @@ export const SignUp: React.FC = () => {
             />
           </div>
           <div className="inputArea">
-            <label htmlFor="password">パスワード確認:</label>
+            <label htmlFor="passwordConfirmation">パスワード確認:</label>
             <input
               id="passwordConfirmation"
-              type="passwordConfirmation"
+              type="password"
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
