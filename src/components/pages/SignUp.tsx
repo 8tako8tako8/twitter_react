@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { signUp } from '../../lib/api/auth'
@@ -30,7 +26,6 @@ export const SignUp: React.FC = () => {
       confirmSuccessURL: confirmSuccessURL,
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     signUp(params)
       .then((res) => {
         if (res.status === 200) {
@@ -41,6 +36,7 @@ export const SignUp: React.FC = () => {
         }
       })
       .catch((err) => {
+        console.log(err)
         setErrorMessage('メールアドレス または パスワード が正しくありません')
       })
   }
