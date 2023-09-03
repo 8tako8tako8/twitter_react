@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
@@ -9,6 +9,8 @@ import { Confirm } from './components/pages/Confirm'
 import { Error } from './components/pages/Error'
 import { PrivateRoute } from './components/pages/PrivateRoute'
 import { AppDispatch, RootState } from './redux/store'
+import { getCurrentUser } from './lib/api/auth'
+import { setCurrentUser } from './redux/userSlice'
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
@@ -17,6 +19,24 @@ const homeUrl = process.env.PUBLIC_URL
 
 const App: React.FC = () => {
   const isLogined = useAppSelector((state) => state.user.isLogined)
+  const dispatch = useAppDispatch()
+
+  const handleGetCurrentUser = async () => {
+    try {
+      const res = await getCurrentUser()
+      if (res && res.data) {
+        const { email, name, nickname, image } = res.data.data
+        dispatch(setCurrentUser({ email, name, nickname, image }))
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  useEffect(() => {
+    void handleGetCurrentUser()
+  }, [dispatch])
+
   return (
     <Router>
       <Routes>
