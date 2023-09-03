@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ErrorMessage } from '../organisms/ErrorMessage'
+import { LoginParams } from '../../types'
+import { login } from '../../lib/api/auth'
 
-export const SignIn: React.FC = () => {
+export const Login: React.FC = () => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
@@ -10,8 +12,30 @@ export const SignIn: React.FC = () => {
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault()
 
-    setErrorMessage('エラーです')
-    console.log('ログイン処理')
+    const params: LoginParams = {
+      email: email,
+      password: password,
+    }
+
+    console.log(params)
+
+    login(params)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('ログイン成功')
+          setErrorMessage(null)
+        } else {
+          setErrorMessage('ログインに失敗しました')
+        }
+      })
+      .catch((err) => {
+        if (typeof err.response?.data?.errors[0] === 'string') {
+          setErrorMessage(err.response.data.errors[0])
+        } else {
+          console.log(err)
+          setErrorMessage('不明なエラー。しばらく時間をおいて試してください。')
+        }
+      })
   }
 
   return (
