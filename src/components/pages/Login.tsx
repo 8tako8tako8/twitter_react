@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 import { ErrorMessage } from '../organisms/ErrorMessage'
 import { LoginParams } from '../../types'
@@ -7,12 +9,15 @@ import { login } from '../../lib/api/auth'
 import { setLogin } from '../../redux/userSlice'
 import { useAppDispatch } from '../../App'
 
+const homeUrl = process.env.PUBLIC_URL
+
 export const Login: React.FC = () => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,9 +30,20 @@ export const Login: React.FC = () => {
     login(params)
       .then((res) => {
         if (res.status === 200) {
+          Cookies.set('_access_token', res.headers['access-token'] as string, {
+            secure: true,
+          })
+          Cookies.set('_client', res.headers['client'] as string, {
+            secure: true,
+          })
+          Cookies.set('_uid', res.headers['uid'] as string, { secure: true })
+
           const { email, name, nickname, image } = res.data.data
           dispatch(setLogin({ email, name, nickname, image }))
           setErrorMessage(null)
+
+          // ホーム画面に遷移させる
+          navigate(homeUrl)
         } else {
           setErrorMessage('ログインに失敗しました')
         }
