@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { ErrorMessage } from '../organisms/ErrorMessage'
 import { LoginParams } from '../../types'
 import { login } from '../../lib/api/auth'
-import { setLogin } from '../../redux/userSlice'
+import { setCurrentUser } from '../../redux/userSlice'
 import { useAppDispatch } from '../../App'
 
 const homeUrl = process.env.PUBLIC_URL
@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
           Cookies.set('_uid', res.headers['uid'] as string, { secure: true })
 
           const { email, name, nickname, image } = res.data.data
-          dispatch(setLogin({ email, name, nickname, image }))
+          dispatch(setCurrentUser({ email, name, nickname, image }))
           setErrorMessage(null)
 
           // ホーム画面に遷移させる
