@@ -11,6 +11,7 @@ import { PrivateRoute } from './components/pages/PrivateRoute'
 import { AppDispatch, RootState } from './redux/store'
 import { getCurrentUser } from './lib/api/auth'
 import { setCurrentUser } from './redux/userSlice'
+import { Loading } from './components/pages/Loading'
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
@@ -18,10 +19,11 @@ export const useAppDispatch = () => useDispatch<AppDispatch>()
 const homeUrl = process.env.PUBLIC_URL
 
 const App: React.FC = () => {
-  const isLogined = useAppSelector((state) => state.user.isLogined)
   const dispatch = useAppDispatch()
+  const [loading, setLoading] = React.useState<boolean>(true)
 
   const handleGetCurrentUser = async () => {
+    setLoading(true)
     try {
       const res = await getCurrentUser()
       if (res && res.data) {
@@ -30,12 +32,18 @@ const App: React.FC = () => {
       }
     } catch (err) {
       console.error(err)
+    } finally {
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     void handleGetCurrentUser()
   }, [dispatch])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <Router>
@@ -46,10 +54,7 @@ const App: React.FC = () => {
         <Route path={homeUrl + '/confirm'} element={<Confirm />} />
 
         {/* private route */}
-        <Route
-          path={homeUrl}
-          element={<PrivateRoute isLogined={isLogined} children={<Home />} />}
-        />
+        <Route path={homeUrl} element={<PrivateRoute children={<Home />} />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>
