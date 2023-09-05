@@ -5,11 +5,20 @@ import { SignUpParams } from '../../types'
 import { ErrorMessage } from '../organisms/ErrorMessage'
 
 export const SignUp: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [registrationInput, setregistrationInput] = useState({
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+  })
   const [isSignUp, setIsSignUp] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+
+  const onChangeRegistrationInput = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target
+    setregistrationInput({ ...registrationInput, [name]: value })
+  }
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,9 +29,7 @@ export const SignUp: React.FC = () => {
         : (process.env.REACT_APP_CONFIRM_SUCCESS_URL_LOCAL as string)
 
     const params: SignUpParams = {
-      email: email,
-      password: password,
-      passwordConfirmation: passwordConfirmation,
+      ...registrationInput,
       confirmSuccessURL: confirmSuccessURL,
     }
 
@@ -50,27 +57,30 @@ export const SignUp: React.FC = () => {
             <label htmlFor="email">メールアドレス:</label>
             <input
               id="email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={registrationInput.email}
+              onChange={onChangeRegistrationInput}
             />
           </div>
           <div className="inputArea">
             <label htmlFor="password">パスワード:</label>
             <input
               id="password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={registrationInput.password}
+              onChange={onChangeRegistrationInput}
             />
           </div>
           <div className="inputArea">
             <label htmlFor="passwordConfirmation">パスワード確認:</label>
             <input
               id="passwordConfirmation"
+              name="passwordConfirmation"
               type="password"
-              value={passwordConfirmation}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              value={registrationInput.passwordConfirmation}
+              onChange={onChangeRegistrationInput}
             />
           </div>
           <button type="submit">登録</button>
