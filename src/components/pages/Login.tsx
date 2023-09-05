@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
     email: '',
     password: '',
   })
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = React.useState<string>('')
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
 
           const { email, name, nickname, image } = res.data.data
           dispatch(setCurrentUser({ email, name, nickname, image }))
-          setErrorMessage(null)
+          setErrorMessage('')
 
           // ホーム画面に遷移させる
           navigate(homeUrl)
@@ -90,7 +90,7 @@ export const Login: React.FC = () => {
           />
         </div>
         <button type="submit">ログイン</button>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </form>
     </StyledSignIn>
   )
