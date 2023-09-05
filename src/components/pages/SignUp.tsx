@@ -90,7 +90,7 @@ export const SignUp: React.FC = () => {
       {isSignUp && (
         <p>ご登録ありがとうございます。メールを確認してください。</p>
       )}
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </StyledSignUp>
   )
 }
