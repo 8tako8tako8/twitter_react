@@ -12,19 +12,26 @@ import { useAppDispatch } from '../../App'
 const homeUrl = process.env.PUBLIC_URL
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [loginInput, setLoginInput] = React.useState({
+    email: '',
+    password: '',
+  })
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
+  const onChangeLoginInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setLoginInput({ ...loginInput, [name]: value })
+  }
+
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault()
 
     const params: LoginParams = {
-      email: email,
-      password: password,
+      email: loginInput.email,
+      password: loginInput.password,
     }
 
     login(params)
@@ -66,18 +73,20 @@ export const Login: React.FC = () => {
           <label htmlFor="email">メールアドレス</label>
           <input
             id="email"
+            name="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={loginInput.email}
+            onChange={onChangeLoginInput}
           />
         </div>
         <div>
           <label htmlFor="password">パスワード</label>
           <input
             id="password"
+            name="password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={loginInput.password}
+            onChange={onChangeLoginInput}
           />
         </div>
         <button type="submit">ログイン</button>
