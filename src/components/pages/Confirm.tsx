@@ -2,10 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 export const Confirm: React.FC = () => {
+  const homeUrl = process.env.PUBLIC_URL
+
   return (
     <StyledConfirm>
       <h2>メール認証が完了しました</h2>
-      <a href="/login">ログインする</a>
+      <a href={homeUrl + '/login'}>ログインする</a>
     </StyledConfirm>
   )
 }

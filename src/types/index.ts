@@ -5,3 +5,9 @@ export interface SignUpParams {
   passwordConfirmation: string
   confirmSuccessURL: string
 }
+
+// ログイン
+export interface LoginParams {
+  email: string
+  password: string
+}
