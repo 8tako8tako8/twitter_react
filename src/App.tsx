@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
+import './App.css'
 import { Home } from './components/pages/Home'
 import { SignUp } from './components/pages/SignUp'
 import { Login } from './components/pages/Login'
