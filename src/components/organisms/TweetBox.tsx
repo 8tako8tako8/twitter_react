@@ -3,10 +3,12 @@ import styled from 'styled-components'
 import { Avatar } from '@mui/material'
 import { Button } from '@mui/material'
 import { postTweet, postTweetImage } from '../../lib/api/tweet'
+import { ErrorMessage } from './ErrorMessage'
 
 export const TweetBox: React.FC = () => {
   const [tweetMessage, setTweetMessage] = useState('')
   const [tweetImage, setTweetImage] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -25,9 +27,9 @@ export const TweetBox: React.FC = () => {
 
     postTweet(tweetMessage)
       .then((res) => {
-        if (res.status != 200) throw new Error('ツイート投稿に失敗しました')
-        if (!!res.data.tweet || !res.data.tweet.id)
-          throw new Error('ツイートに失敗しました')
+        if (res.status != 201) throw new Error('ツイート投稿に失敗しました')
+        if (!res.data.tweet || !res.data.tweet.id)
+          throw new Error('ツイート投稿に失敗しました')
 
         const tweetId: number = res.data.tweet.id
         if (tweetImage) {
@@ -38,8 +40,10 @@ export const TweetBox: React.FC = () => {
       .then(() => {
         setTweetMessage('')
         setTweetImage(null)
+        setErrorMessage('')
       })
       .catch((err) => {
+        setErrorMessage((err.message || err) as string)
         console.log(err)
       })
   }
@@ -67,6 +71,7 @@ export const TweetBox: React.FC = () => {
             ツイートする
           </Button>
         </form>
+        {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </div>
     </StyledTweetBox>
   )
