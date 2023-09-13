@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '@mui/material'
 import { Button } from '@mui/material'
+import { postTweet, postTweetImage } from '../../lib/api/tweet'
 
 export const TweetBox: React.FC = () => {
   const [tweetMessage, setTweetMessage] = useState('')
@@ -17,19 +18,36 @@ export const TweetBox: React.FC = () => {
     }
   }
 
+  const handlePostTweet = (e: React.FormEvent) => {
     if (tweetMessage === '') return
 
     e.preventDefault()
-    // TODO: ツイートを送信する処理
 
-    setTweetMessage('')
-    setTweetImage('')
+    postTweet(tweetMessage)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ツイート投稿に失敗しました')
+        if (!!res.data.tweet || !res.data.tweet.id)
+          throw new Error('ツイートに失敗しました')
+
+        const tweetId: number = res.data.tweet.id
+        if (tweetImage) {
+          return postTweetImage(tweetId, tweetImage)
+        }
+        return Promise.resolve(res)
+      })
+      .then(() => {
+        setTweetMessage('')
+        setTweetImage(null)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <StyledTweetBox>
       <div className="tweetBox">
-        <form>
+        <form onSubmit={handlePostTweet}>
           <div className="tweetBoxInput">
             <Avatar />
             <input
