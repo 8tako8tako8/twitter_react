@@ -1,57 +1,84 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Post } from './Post'
+import { getPosts } from '../../lib/api/tweet'
+import { Loading } from '../pages/Loading'
 
-type Tweet = {
+type Post = {
   id: number
   user: {
     id: string
-    userName: string
-    displayName: string
+    name: string
+    nickname: string
     avatarUrl: string
   }
-  content: string
-  image: string
+  tweet: string
+  imageUrl: string
   retweets: number
   likes: number
 }
 
-const sampleTweets: Tweet[] = [
-  {
-    id: 1,
-    user: {
-      id: 'u1',
-      userName: 'aliiiiii1',
-      displayName: 'Alice',
-      avatarUrl: '/path/to/avatar1.png',
-    },
-    content: 'This is a sample tweet from Alice.',
-    image: 'https://source.unsplash.com/random',
-    retweets: 5,
-    likes: 20,
+// TODO: リツイート、いいね機能、アバター画像後に削除する
+const initialPost: Post = {
+  id: 1,
+  user: {
+    id: 'u1',
+    name: 'aliiiiii1',
+    nickname: 'Alice',
+    avatarUrl: '/path/to/avatar1.png',
   },
-  {
-    id: 2,
-    user: {
-      id: 'u2',
-      userName: 'booooooooc',
-      displayName: 'Bob',
-      avatarUrl: '/path/to/avatar2.png',
-    },
-    content: 'Another sample tweet, this time from Bob.',
-    image: '',
-    retweets: 10,
-    likes: 15,
-  },
-]
+  tweet: 'This is a sample tweet from Alice.',
+  imageUrl: 'https://source.unsplash.com/random',
+  retweets: 5,
+  likes: 20,
+}
 
 export const Posts: React.FC = () => {
-  const [tweets] = useState<Tweet[]>(sampleTweets)
+  const [posts, setPosts] = useState<Post[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const handleGetPosts = () => {
+    setLoading(true)
+
+    getPosts()
+      .then((res) => {
+        if (res && res.data) {
+          console.log(res.data)
+          const tmpPosts: Post[] = (res.data.tweets as Post[]).map((tweet) => {
+            console.log(tweet)
+            return {
+              ...initialPost,
+              id: tweet.id,
+              user: tweet.user,
+              tweet: tweet.tweet,
+              imageUrl: tweet.imageUrl,
+              retweets: tweet.retweets,
+              likes: tweet.likes,
+            }
+          })
+          setPosts(tmpPosts)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    void handleGetPosts()
+  }, [])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <StyledPost>
-      {tweets.map((tweet) => (
-        <Post key={tweet.id} tweet={tweet} />
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
       ))}
     </StyledPost>
   )
