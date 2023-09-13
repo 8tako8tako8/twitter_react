@@ -5,9 +5,18 @@ import { Button } from '@mui/material'
 
 export const TweetBox: React.FC = () => {
   const [tweetMessage, setTweetMessage] = useState('')
-  const [tweetImage, setTweetImage] = useState('')
+  const [tweetImage, setTweetImage] = useState<File | null>(null)
 
-  const sendTweet = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+      setTweetImage(file)
+    } else {
+      alert('画像形式は PNG または JPEG のみ投稿できます')
+      e.target.value = ''
+    }
+  }
+
     if (tweetMessage === '') return
 
     e.preventDefault()
@@ -31,17 +40,12 @@ export const TweetBox: React.FC = () => {
             />
           </div>
           <input
-            value={tweetImage}
             className="tweetBoxImageInput"
-            placeholder="画像のURLを入力してください"
-            type="text"
-            onChange={(e) => setTweetImage(e.target.value)}
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleImageChange}
           />
-          <Button
-            className="tweetBoxTweetButton"
-            type="submit"
-            onClick={(e) => sendTweet(e)}
-          >
+          <Button className="tweetBoxTweetButton" type="submit">
             ツイートする
           </Button>
         </form>
