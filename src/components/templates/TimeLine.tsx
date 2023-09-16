@@ -8,8 +8,8 @@ export const TimeLine: React.FC = () => {
     <StyledTimeLine>
       <div className="timeLineHeader">
         <h2>ホーム</h2>
+        <TweetBox />
       </div>
-      <TweetBox />
       <Posts />
     </StyledTimeLine>
   )
