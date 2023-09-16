@@ -32,7 +32,7 @@ const StyledHome = styled.div`
   }
 
   .timeLine {
-    min-width: 700px;
+    min-width: 600px;
     border-right: 1px solid var(--twitter-background);
     overflow-y: scroll;
   }

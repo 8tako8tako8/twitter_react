@@ -80,7 +80,6 @@ export const TweetBox: React.FC = () => {
 const StyledTweetBox = styled.div`
   .tweetBox {
     padding-bottom: 10px;
-    border-bottom: 8px solid var(--twitter-background);
     padding-right: 10px;
   }
 
