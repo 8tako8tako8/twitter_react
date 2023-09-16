@@ -1,7 +1,14 @@
 import client from './client'
 
-export const getPosts = () => {
-  return client.get('tweets')
+const POSTS_PER_PAGE = 10
+
+export const getPosts = (currentPage: number) => {
+  return client.get('tweets', {
+    params: {
+      limit: POSTS_PER_PAGE,
+      offset: currentPage,
+    },
+  })
 }
 
 export const postTweet = (tweet: string) => {

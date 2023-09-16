@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Post } from './Post'
 import { getPosts } from '../../lib/api/tweet'
 import { Loading } from '../pages/Loading'
+import { Pagination } from '@mui/material'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type Post = {
   id: number
@@ -36,16 +38,30 @@ const initialPost: Post = {
 export const Posts: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const [totalPages, setTotalPages] = React.useState(1)
 
-  const handleGetPosts = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page)
+    navigate({ ...location, search: `?page=${page}` })
+    handleGetPosts(page)
+    window.scrollTo(0, 0)
+  }
+
+  const handleGetPosts = (page: number) => {
     setLoading(true)
 
-    getPosts()
+    getPosts(page)
       .then((res) => {
         if (res && res.data) {
-          console.log(res.data)
+          setTotalPages((res.data.pagination.totalPages as number) || 1)
           const tmpPosts: Post[] = (res.data.tweets as Post[]).map((tweet) => {
-            console.log(tweet)
             return {
               ...initialPost,
               id: tweet.id,
@@ -60,7 +76,7 @@ export const Posts: React.FC = () => {
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
       })
       .finally(() => {
         setLoading(false)
@@ -68,8 +84,12 @@ export const Posts: React.FC = () => {
   }
 
   useEffect(() => {
-    void handleGetPosts()
-  }, [])
+    //  クエリパラメータからpageを取得する
+    const queryParams = new URLSearchParams(location.search)
+    const page = Number(queryParams.get('page')) || 1
+    setCurrentPage(page)
+    handleGetPosts(page)
+  }, [location.search])
 
   if (loading) {
     return <Loading />
@@ -80,6 +100,16 @@ export const Posts: React.FC = () => {
       {posts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
+      <div className="pagination">
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          variant="outlined"
+          color="primary"
+          size="small"
+          onChange={handleChangePage}
+        />
+      </div>
     </StyledPost>
   )
 }
@@ -136,5 +166,13 @@ const StyledPost = styled.div`
 
   .postAvatar {
     padding: 15px;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 `
