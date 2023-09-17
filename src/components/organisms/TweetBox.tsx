@@ -4,11 +4,20 @@ import { Avatar } from '@mui/material'
 import { Button } from '@mui/material'
 import { postTweet, postTweetImage } from '../../lib/api/tweet'
 import { ErrorMessage } from './ErrorMessage'
+import { useNavigate } from 'react-router-dom'
 
-export const TweetBox: React.FC = () => {
+const homeUrl = process.env.PUBLIC_URL
+
+type Props = {
+  handleGetPosts: (page: number) => void
+}
+
+export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
   const [tweetMessage, setTweetMessage] = useState('')
   const [tweetImage, setTweetImage] = useState<File | null>(null)
   const [errorMessage, setErrorMessage] = useState('')
+
+  const navigate = useNavigate()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -41,6 +50,15 @@ export const TweetBox: React.FC = () => {
         setTweetMessage('')
         setTweetImage(null)
         setErrorMessage('')
+
+        // ツイート投稿後にホーム画面1ページ目に遷移させる
+        const queryParams = new URLSearchParams(location.search)
+        if (queryParams.get('page') === null) {
+          // 元々1ページ目にいた場合はクエリパラメータがないので意図的に再取得させる
+          handleGetPosts(1)
+        } else {
+          navigate(homeUrl)
+        }
       })
       .catch((err) => {
         setErrorMessage((err.message || err) as string)
@@ -120,7 +138,6 @@ const StyledTweetBox = styled.div`
     width: 130px !important;
     height: 40px !important;
     border-radius: 30px !important;
-    /* margin-top: 20px !important; */
     margin-left: auto !important;
   }
 `
