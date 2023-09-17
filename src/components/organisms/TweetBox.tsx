@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '@mui/material'
 import { Button } from '@mui/material'
@@ -14,20 +14,10 @@ type Props = {
 
 export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
   const [tweetMessage, setTweetMessage] = useState('')
-  const [tweetImage, setTweetImage] = useState<File | null>(null)
   const [errorMessage, setErrorMessage] = useState('')
 
   const navigate = useNavigate()
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-      setTweetImage(file)
-    } else {
-      alert('画像形式は PNG または JPEG のみ投稿できます')
-      e.target.value = ''
-    }
-  }
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   const handlePostTweet = (e: React.FormEvent) => {
     if (tweetMessage === '') return
@@ -41,6 +31,7 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
           throw new Error('ツイート投稿に失敗しました')
 
         const tweetId: number = res.data.tweet.id
+        const tweetImage = imageInputRef.current?.files?.[0]
         if (tweetImage) {
           return postTweetImage(tweetId, tweetImage)
         }
@@ -48,8 +39,12 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
       })
       .then(() => {
         setTweetMessage('')
-        setTweetImage(null)
         setErrorMessage('')
+
+        // ツイート投稿後にツイート画像をリセットする
+        if (imageInputRef.current) {
+          imageInputRef.current.value = ''
+        }
 
         // ツイート投稿後にホーム画面1ページ目に遷移させる
         const queryParams = new URLSearchParams(location.search)
@@ -81,10 +76,10 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
           </div>
           <div className="tweetBoxImageAndButton">
             <input
+              ref={imageInputRef}
               className="tweetBoxImageInput"
               type="file"
               accept="image/png, image/jpeg"
-              onChange={handleImageChange}
             />
             <Button className="tweetBoxTweetButton" type="submit">
               ツイートする
