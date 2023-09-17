@@ -61,15 +61,17 @@ export const TweetBox: React.FC = () => {
               onChange={(e) => setTweetMessage(e.target.value)}
             />
           </div>
-          <input
-            className="tweetBoxImageInput"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={handleImageChange}
-          />
-          <Button className="tweetBoxTweetButton" type="submit">
-            ツイートする
-          </Button>
+          <div className="tweetBoxImageAndButton">
+            <input
+              className="tweetBoxImageInput"
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={handleImageChange}
+            />
+            <Button className="tweetBoxTweetButton" type="submit">
+              ツイートする
+            </Button>
+          </div>
         </form>
         {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </div>
@@ -100,6 +102,12 @@ const StyledTweetBox = styled.div`
     border: none;
   }
 
+  .tweetBoxImageAndButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .tweetBoxImageInput {
     border: none;
     padding: 20px;
@@ -112,7 +120,7 @@ const StyledTweetBox = styled.div`
     width: 130px !important;
     height: 40px !important;
     border-radius: 30px !important;
-    margin-top: 20px !important;
+    /* margin-top: 20px !important; */
     margin-left: auto !important;
   }
 `
