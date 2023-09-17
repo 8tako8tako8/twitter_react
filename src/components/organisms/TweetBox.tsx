@@ -62,7 +62,7 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
       })
       .catch((err) => {
         setErrorMessage((err.message || err) as string)
-        console.log(err)
+        console.error(err)
       })
   }
 
