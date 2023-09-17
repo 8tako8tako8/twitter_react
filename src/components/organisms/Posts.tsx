@@ -57,59 +57,6 @@ export const Posts: React.FC<Props> = ({
 }
 
 const StyledPost = styled.div`
-  .post {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--twitter-background);
-  }
-
-  .postBody {
-    flex: 1;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .postBody > img {
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  .postFooter {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-  }
-
-  .postHeaderDescription {
-    margin-bottom: 10px;
-    font-size: 15px;
-  }
-
-  .postHeaderText > h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
-
-  .postBadge {
-    font-size: 14px !important;
-    color: var(--twitter-color);
-  }
-
-  .postHeaderSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: gray;
-  }
-
-  .postAvatar {
-    padding: 15px;
-  }
-
   .pagination {
     display: flex;
     align-items: center;

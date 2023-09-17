@@ -71,6 +71,7 @@ const StyledPost = styled.div`
 
   .postBody {
     flex: 1;
+    min-width: 0;
   }
 
   p {
@@ -94,6 +95,8 @@ const StyledPost = styled.div`
   .postHeaderDescription {
     margin-bottom: 10px;
     font-size: 15px;
+    white-space: normal;
+    word-wrap: break-word;
   }
 
   .postHeaderText > h3 {
