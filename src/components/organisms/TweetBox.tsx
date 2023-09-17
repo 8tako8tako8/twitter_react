@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 import { postTweet, postTweetImage } from '../../lib/api/tweet'
 import { ErrorMessage } from './ErrorMessage'
 import { useNavigate } from 'react-router-dom'
+import { validateTweetMessage } from '../../validators/tweetValidator'
 
 const homeUrl = process.env.PUBLIC_URL
 
@@ -20,9 +21,13 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
   const imageInputRef = useRef<HTMLInputElement>(null)
 
   const handlePostTweet = (e: React.FormEvent) => {
-    if (tweetMessage === '') return
-
     e.preventDefault()
+
+    const validationError = validateTweetMessage(tweetMessage)
+    if (validationError) {
+      setErrorMessage(validationError)
+      return
+    }
 
     postTweet(tweetMessage)
       .then((res) => {
@@ -67,10 +72,9 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
         <form onSubmit={handlePostTweet}>
           <div className="tweetBoxInput">
             <Avatar />
-            <input
+            <textarea
               value={tweetMessage}
               placeholder="いまどうしてる？"
-              type="text"
               onChange={(e) => setTweetMessage(e.target.value)}
             />
           </div>
@@ -108,11 +112,14 @@ const StyledTweetBox = styled.div`
     display: flex;
   }
 
-  .tweetBoxInput > input {
+  .tweetBoxInput > textarea {
     flex: 1;
     font-size: 20px;
     margin-left: 20px;
     border: none;
+    resize: none;
+    overflow: auto;
+    min-width: 0;
   }
 
   .tweetBoxImageAndButton {
