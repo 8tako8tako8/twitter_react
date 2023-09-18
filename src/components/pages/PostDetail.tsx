@@ -2,6 +2,7 @@ import React from 'react'
 import { styled } from 'styled-components'
 import { SideBar } from '../templates/SideBar'
 import { PostDetailBox } from '../organisms/PostDetailBox'
+import { CommentBox } from '../organisms/CommentBox'
 
 export const PostDetail: React.FC = () => {
   return (
@@ -9,8 +10,9 @@ export const PostDetail: React.FC = () => {
       <div className="sideBar">
         <SideBar />
       </div>
-      <div className="tweet">
+      <div className="post">
         <PostDetailBox />
+        <CommentBox />
       </div>
     </StyledPostDetail>
   )
@@ -31,13 +33,13 @@ const StyledPostDetail = styled.div`
     padding-right: 20px;
   }
 
-  .tweet {
+  .post {
     min-width: 600px;
     border-right: 1px solid var(--twitter-background);
     overflow-y: scroll;
   }
 
-  .tweet::-webkit-scrollbar {
+  .post::-webkit-scrollbar {
     display: none;
   }
 `
