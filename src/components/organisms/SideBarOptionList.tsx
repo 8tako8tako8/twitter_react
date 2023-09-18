@@ -12,38 +12,42 @@ import { useLocation } from 'react-router-dom'
 export const SideBarOptionList: React.FC = () => {
   const location = useLocation()
 
+  const SIDEBAR_LIST = [
+    { text: 'ホーム', icon: HomeIcon, isActive: location.pathname === '/' },
+    {
+      text: '通知',
+      icon: NotificationsNoneIcon,
+      isActive: location.pathname === '/notifications',
+    },
+    {
+      text: 'メッセージ',
+      icon: MailOutlineIcon,
+      isActive: location.pathname === '/messages',
+    },
+    {
+      text: 'ブックマーク',
+      icon: BookmarkBorderIcon,
+      isActive: location.pathname === '/bookmarks',
+    },
+    {
+      text: 'プロフィール',
+      icon: PermIdentityIcon,
+      isActive: location.pathname === '/profile',
+    },
+    {
+      text: '退会',
+      icon: MoreHorizIcon,
+      isActive: location.pathname === '/cancel',
+    },
+  ]
+
   return (
     <StyledSideBarOptionList>
-      <SideBarOption
-        text="ホーム"
-        Icon={HomeIcon}
-        active={location.pathname === '/'}
-      />
-      <SideBarOption
-        text="通知"
-        Icon={NotificationsNoneIcon}
-        active={location.pathname === '/notifications'}
-      />
-      <SideBarOption
-        text="メッセージ"
-        Icon={MailOutlineIcon}
-        active={location.pathname === '/messages'}
-      />
-      <SideBarOption
-        text="ブックマーク"
-        Icon={BookmarkBorderIcon}
-        active={location.pathname === '/bookmarks'}
-      />
-      <SideBarOption
-        text="プロフィール"
-        Icon={PermIdentityIcon}
-        active={location.pathname === '/profile'}
-      />
-      <SideBarOption
-        text="退会"
-        Icon={MoreHorizIcon}
-        active={location.pathname === '/cancel'}
-      />
+      {SIDEBAR_LIST.map((item) => (
+        <SideBarOption text={item.text} isActive={item.isActive}>
+          <item.icon />
+        </SideBarOption>
+      ))}
     </StyledSideBarOptionList>
   )
 }

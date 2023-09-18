@@ -3,17 +3,19 @@ import styled from 'styled-components'
 
 type Props = {
   text: string
-  Icon: React.ElementType
-  active: boolean
+  isActive: boolean
+  children: React.ReactNode
 }
 
-export const SideBarOption: React.FC<Props> = (props) => {
-  const { text, Icon, active } = props
-
+export const SideBarOption: React.FC<Props> = ({
+  text,
+  isActive,
+  children,
+}) => {
   return (
     <StyledSideBarOption>
-      <div className={`sideBarOption ${active && 'sideBarOptionActive'}`}>
-        <Icon />
+      <div className={`sideBarOption ${isActive && 'sideBarOptionActive'}`}>
+        {children}
         <h2>{text}</h2>
       </div>
     </StyledSideBarOption>
