@@ -96,7 +96,7 @@ export const PostDetailBox: React.FC = () => {
               </h3>
             </div>
             <div className="postHeaderDescription">
-              <p>ツイート内容</p>
+              <p>{post.tweet}</p>
             </div>
           </div>
           {post.imageUrl && <img src={post.imageUrl} />}
