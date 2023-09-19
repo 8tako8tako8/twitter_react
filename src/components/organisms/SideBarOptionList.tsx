@@ -44,7 +44,11 @@ export const SideBarOptionList: React.FC = () => {
   return (
     <StyledSideBarOptionList>
       {SIDEBAR_LIST.map((item) => (
-        <SideBarOption text={item.text} isActive={item.isActive}>
+        <SideBarOption
+          key={item.text}
+          text={item.text}
+          isActive={item.isActive}
+        >
           <item.icon />
         </SideBarOption>
       ))}
