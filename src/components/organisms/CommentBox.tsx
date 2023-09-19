@@ -36,6 +36,7 @@ const StyledCommentBox = styled.div`
   .commentBox {
     padding-bottom: 10px;
     padding-right: 10px;
+    border-bottom: 1px solid var(--twitter-background);
   }
 
   .commentBox > form {
