@@ -5,8 +5,11 @@ import {
   VerifiedUser,
 } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
+import { getPost } from '../../lib/api/tweet'
+import { useParams } from 'react-router-dom'
+import { Loading } from '../pages/Loading'
 
 type Post = {
   id: number
@@ -38,7 +41,42 @@ const initialPost: Post = {
 }
 
 export const PostDetailBox: React.FC = () => {
-  const [post] = useState<Post>(initialPost)
+  const [post, setPost] = useState<Post>(initialPost)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const { tweetId } = useParams()
+
+  const handleGetPost = (tweetId: number) => {
+    setLoading(true)
+
+    getPost(tweetId)
+      .then((res) => {
+        if (res && res.data) {
+          const resPost: Post = {
+            ...initialPost,
+            id: res.data.id,
+            user: res.data.user,
+            tweet: res.data.tweet,
+            imageUrl: res.data.imageUrl,
+          }
+          setPost(resPost)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    handleGetPost(Number(tweetId))
+  }, [])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <StyledPostDetailBox>

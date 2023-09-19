@@ -58,7 +58,7 @@ const App: React.FC = () => {
         {/* private route */}
         <Route path={homeUrl} element={<PrivateRoute children={<Home />} />} />
         <Route
-          path={homeUrl + '/tweets/:id'}
+          path={homeUrl + '/tweets/:tweetId'}
           element={<PrivateRoute children={<PostDetail />} />}
         />
         <Route path="*" element={<Error />} />
