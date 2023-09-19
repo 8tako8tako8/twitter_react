@@ -3,6 +3,7 @@ import { styled } from 'styled-components'
 import { SideBar } from '../templates/SideBar'
 import { PostDetailBox } from '../organisms/PostDetailBox'
 import { CommentBox } from '../organisms/CommentBox'
+import { Comments } from '../organisms/Comments'
 
 export const PostDetail: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ export const PostDetail: React.FC = () => {
       <div className="post">
         <PostDetailBox />
         <CommentBox />
+        <Comments />
       </div>
     </StyledPostDetail>
   )
