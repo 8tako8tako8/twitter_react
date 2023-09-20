@@ -13,6 +13,7 @@ import { AppDispatch, RootState } from './redux/store'
 import { getCurrentUser } from './lib/api/auth'
 import { setCurrentUser } from './redux/userSlice'
 import { Loading } from './components/pages/Loading'
+import { PostDetail } from './components/pages/PostDetail'
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
@@ -56,6 +57,10 @@ const App: React.FC = () => {
 
         {/* private route */}
         <Route path={homeUrl} element={<PrivateRoute children={<Home />} />} />
+        <Route
+          path={homeUrl + '/tweets/:tweetId'}
+          element={<PrivateRoute children={<PostDetail />} />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

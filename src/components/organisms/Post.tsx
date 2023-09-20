@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 type Post = {
@@ -26,6 +27,8 @@ type Props = {
   post: Post
 }
 
+const homeUrl = process.env.PUBLIC_URL
+
 export const Post: React.FC<Props> = (props) => {
   const { post } = props
 
@@ -36,20 +39,22 @@ export const Post: React.FC<Props> = (props) => {
           <Avatar />
         </div>
         <div className="postBody">
-          <div className="postHeader">
-            <div className="postHeaderText">
-              <h3>
-                {post.user.nickname}
-                <span className="postHeaderSpecial">
-                  <VerifiedUser className="postBadge" />
-                  {post.user.name}
-                </span>
-              </h3>
+          <Link to={`${homeUrl}/tweets/${post.id}`} className="postLink">
+            <div className="postHeader">
+              <div className="postHeaderText">
+                <h3>
+                  {post.user.nickname}
+                  <span className="postHeaderSpecial">
+                    <VerifiedUser className="postBadge" />
+                    {post.user.name}
+                  </span>
+                </h3>
+              </div>
+              <div className="postHeaderDescription">
+                <p>{post.tweet}</p>
+              </div>
             </div>
-            <div className="postHeaderDescription">
-              <p>{post.tweet}</p>
-            </div>
-          </div>
+          </Link>
           {post.imageUrl && <img src={post.imageUrl} />}
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
@@ -82,6 +87,11 @@ const StyledPost = styled.div`
   .postBody > img {
     border-radius: 20px;
     width: 100%;
+  }
+
+  .postLink {
+    text-decoration: none;
+    color: inherit;
   }
 
   .postFooter {

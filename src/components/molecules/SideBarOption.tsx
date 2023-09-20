@@ -1,28 +1,38 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 type Props = {
   text: string
+  linkTo: string
   isActive: boolean
   children: React.ReactNode
 }
 
 export const SideBarOption: React.FC<Props> = ({
   text,
+  linkTo,
   isActive,
   children,
 }) => {
   return (
     <StyledSideBarOption>
-      <div className={`sideBarOption ${isActive && 'sideBarOptionActive'}`}>
-        {children}
-        <h2>{text}</h2>
-      </div>
+      <Link to={`${linkTo}`} className="sideBarOptionLink">
+        <div className={`sideBarOption ${isActive && 'sideBarOptionActive'}`}>
+          {children}
+          <h2>{text}</h2>
+        </div>
+      </Link>
     </StyledSideBarOption>
   )
 }
 
 const StyledSideBarOption = styled.div`
+  .sideBarOptionLink {
+    text-decoration: none;
+    color: inherit;
+  }
+
   .sideBarOption {
     display: flex;
     align-items: center;

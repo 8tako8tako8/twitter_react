@@ -11,6 +11,10 @@ export const getPosts = (currentPage: number) => {
   })
 }
 
+export const getPost = (tweetId: number) => {
+  return client.get(`tweets/${tweetId}`)
+}
+
 export const postTweet = (tweet: string) => {
   return client.post('tweets', { tweet: tweet })
 }
