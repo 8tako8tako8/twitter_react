@@ -2,19 +2,21 @@ import { LocationOn, VerifiedUser } from '@mui/icons-material'
 import LinkIcon from '@mui/icons-material/Link'
 import CakeIcon from '@mui/icons-material/Cake'
 import { Avatar, Button, Modal, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
+import { getProfile } from '../../lib/api/profile'
+import { useParams } from 'react-router-dom'
 
 type User = {
   id: number
   name: string
   nickname: string
-  birthDate: string
+  birthdate: string
   location: string
   websiteUrl: string
   introduction: string
-  avatarUrl: string
-  headerUrl: string
+  avatarImageUrl: string
+  headerImageUrl: string
 }
 
 // TODO: リツイート、いいね機能、アバター画像後に削除する
@@ -22,17 +24,77 @@ const initialUser: User = {
   id: 1,
   name: 'aliiiiii1',
   nickname: 'Alice',
-  birthDate: '2000-01-01',
+  birthdate: '2000-01-01',
   location: 'Tokyo',
   websiteUrl: 'https://example.com',
   introduction: 'よろしくお願いします！',
-  avatarUrl: 'https://source.unsplash.com/random',
-  headerUrl: 'https://source.unsplash.com/random',
+  avatarImageUrl: 'https://source.unsplash.com/random',
+  headerImageUrl: 'https://source.unsplash.com/random',
 }
+
+type Post = {
+  id: number
+  user: {
+    id: string
+    name: string
+    nickname: string
+    avatarImageUrl: string
+  }
+  tweet: string
+  imageUrl: string
+  retweets: number
+  likes: number
+}
+
+type Profile = User & {
+  posts?: Post[]
+}
+
+// TODO: リツイート、いいね機能、アバター画像追加後に削除する
+// const initialPost: Post = {
+//   id: 1,
+//   user: {
+//     id: 'u1',
+//     name: 'aliiiiii1',
+//     nickname: 'Alice',
+//     avatarImageUrl: '/path/to/avatar1.png',
+//   },
+//   tweet: 'This is a sample tweet from Alice.',
+//   imageUrl: 'https://source.unsplash.com/random',
+//   retweets: 5,
+//   likes: 20,
+// }
 
 export const ProfileDetail: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false)
-  const [profile, setProfile] = useState(initialUser)
+  const [profile, setProfile] = useState(initialUser as Profile)
+
+  const { userId } = useParams()
+
+  const handleGetProfile = (userId: number) => {
+    getProfile(userId)
+      .then((res) => {
+        if (res && res.data) {
+          console.log(res.data)
+          const resProfile: Profile = {
+            ...initialUser,
+            id: res.data.id,
+            name: res.data.name,
+            nickname: res.data.nickname,
+            birthdate: res.data.birthdate,
+            location: res.data.location,
+            websiteUrl: res.data.websiteUrl,
+            introduction: res.data.introduction,
+            avatarImageUrl: res.data.avatarImageUrl,
+            headerImageUrl: res.data.headerImageUrl,
+          }
+          setProfile(resProfile)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -52,11 +114,15 @@ export const ProfileDetail: React.FC = () => {
     setModalOpen(!isModalOpen)
   }
 
+  useEffect(() => {
+    handleGetProfile(Number(userId))
+  }, [])
+
   return (
     <StyledProfileDetail>
       <div className="profileDetail">
         <div className="profileHeader">
-          {initialUser.headerUrl && <img src={initialUser.headerUrl} />}
+          {profile.headerImageUrl && <img src={profile.headerImageUrl} />}
         </div>
         <div className="profileBody">
           <div className="profileBodyTop">
@@ -68,28 +134,28 @@ export const ProfileDetail: React.FC = () => {
             </Button>
           </div>
           <h3>
-            {initialUser.nickname}
+            {profile.nickname}
             <span className="profileBodySpecial">
               <VerifiedUser className="profileBadge" />
-              {initialUser.name}
+              {profile.name}
             </span>
           </h3>
           <div className="profileBodyIntroduction">
-            <p>{initialUser.introduction}</p>
+            <p>{profile.introduction}</p>
           </div>
           <div className="profileBodySubInfo">
             <div className="profileBodySubInfoLocation">
               <LocationOn />
-              <p>{initialUser.location}</p>
+              <p>{profile.location}</p>
             </div>
             <div className="profileBodySubInfoBirthDate">
               <CakeIcon />
-              <p>{initialUser.birthDate}</p>
+              <p>{profile.birthdate}</p>
             </div>
             <div className="profileBodySubInfoWebsiteUrl">
               <LinkIcon />
-              <a target="_blank" href={initialUser.websiteUrl}>
-                {initialUser.websiteUrl}
+              <a target="_blank" href={profile.websiteUrl}>
+                {profile.websiteUrl}
               </a>
             </div>
           </div>
@@ -137,7 +203,7 @@ export const ProfileDetail: React.FC = () => {
               label="誕生日"
               name="birthDate"
               type="date"
-              value={profile.birthDate}
+              value={profile.birthdate}
               onChange={handleInputChange}
               InputLabelProps={{ shrink: true }}
             />
