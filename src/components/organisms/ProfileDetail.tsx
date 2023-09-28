@@ -1,8 +1,8 @@
 import { LocationOn, VerifiedUser } from '@mui/icons-material'
 import LinkIcon from '@mui/icons-material/Link'
 import CakeIcon from '@mui/icons-material/Cake'
-import { Avatar, Button } from '@mui/material'
-import React from 'react'
+import { Avatar, Button, Modal, TextField } from '@mui/material'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 
 type User = {
@@ -31,6 +31,27 @@ const initialUser: User = {
 }
 
 export const ProfileDetail: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [profile, setProfile] = useState(initialUser)
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target
+    setProfile({
+      ...profile,
+      [name]: value,
+    })
+  }
+
+  const handleSaveProfile = () => {
+    // TODO: プロフィール保存処理
+
+    toggleModal()
+  }
+
+  const toggleModal = () => {
+    setModalOpen(!isModalOpen)
+  }
+
   return (
     <StyledProfileDetail>
       <div className="profileDetail">
@@ -42,7 +63,7 @@ export const ProfileDetail: React.FC = () => {
             <div className="profileAvatar">
               <Avatar />
             </div>
-            <Button className="profileBodyTopEditButton">
+            <Button className="profileBodyTopEditButton" onClick={toggleModal}>
               プロフィールを編集する
             </Button>
           </div>
@@ -57,7 +78,6 @@ export const ProfileDetail: React.FC = () => {
             <p>{initialUser.introduction}</p>
           </div>
           <div className="profileBodySubInfo">
-            {/* 横並びでスペースを空けて文字色グレーで、ロケーション、誕生日を並べる */}
             <div className="profileBodySubInfoLocation">
               <LocationOn />
               <p>{initialUser.location}</p>
@@ -75,6 +95,58 @@ export const ProfileDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      <Modal open={isModalOpen} onClose={toggleModal}>
+        <StyledModalContent>
+          <h2>プロフィール編集</h2>
+          <form onSubmit={handleSaveProfile}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="ニックネーム"
+              name="nickname"
+              value={profile.nickname}
+              onChange={handleInputChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="自己紹介"
+              name="introduction"
+              value={profile.introduction}
+              onChange={handleInputChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="ウェブサイトURL"
+              name="websiteUrl"
+              value={profile.websiteUrl}
+              onChange={handleInputChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="場所"
+              name="location"
+              value={profile.location}
+              onChange={handleInputChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="誕生日"
+              name="birthDate"
+              type="date"
+              value={profile.birthDate}
+              onChange={handleInputChange}
+              InputLabelProps={{ shrink: true }}
+            />
+            <SaveButtonField>
+              <SaveButton type="submit">保存</SaveButton>
+            </SaveButtonField>
+          </form>
+        </StyledModalContent>
+      </Modal>
     </StyledProfileDetail>
   )
 }
@@ -162,4 +234,32 @@ const StyledProfileDetail = styled.div`
     display: flex;
     align-items: center;
   }
+`
+
+const StyledModalContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  max-width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+`
+
+const SaveButtonField = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+`
+
+const SaveButton = styled(Button)`
+  background-color: var(--twitter-color) !important;
+  color: white !important;
+  font-weight: 900 !important;
+  width: 130px !important;
+  height: 40px !important;
+  border-radius: 30px !important;
 `
