@@ -4,6 +4,7 @@ import CakeIcon from '@mui/icons-material/Cake'
 import { Avatar, Button, Modal, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
+import { saveProfile } from '../../lib/api/profile'
 
 type User = {
   id: number
@@ -52,8 +53,15 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
   }
 
   const handleSaveProfile = () => {
-    // TODO: プロフィール保存処理
-
+    saveProfile(profile)
+      .then((res) => {
+        console.log(res.data)
+        // setErrorMessage('')
+      })
+      .catch((err) => {
+        // setErrorMessage((err.message || err) as string)
+        console.error(err)
+      })
     toggleModal()
   }
 
@@ -148,7 +156,6 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
               type="date"
               value={profile.birthdate}
               onChange={handleInputChange}
-              InputLabelProps={{ shrink: true }}
             />
             <SaveButtonField>
               <SaveButton type="submit">保存</SaveButton>
