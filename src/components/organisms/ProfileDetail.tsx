@@ -2,10 +2,8 @@ import { LocationOn, VerifiedUser } from '@mui/icons-material'
 import LinkIcon from '@mui/icons-material/Link'
 import CakeIcon from '@mui/icons-material/Cake'
 import { Avatar, Button, Modal, TextField } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
-import { getProfile } from '../../lib/api/profile'
-import { useParams } from 'react-router-dom'
 
 type User = {
   id: number
@@ -15,21 +13,8 @@ type User = {
   location: string
   websiteUrl: string
   introduction: string
-  avatarImageUrl: string
-  headerImageUrl: string
-}
-
-// TODO: リツイート、いいね機能、アバター画像後に削除する
-const initialUser: User = {
-  id: 1,
-  name: 'aliiiiii1',
-  nickname: 'Alice',
-  birthdate: '2000-01-01',
-  location: 'Tokyo',
-  websiteUrl: 'https://example.com',
-  introduction: 'よろしくお願いします！',
-  avatarImageUrl: 'https://source.unsplash.com/random',
-  headerImageUrl: 'https://source.unsplash.com/random',
+  avatarUrl: string
+  headerUrl: string
 }
 
 type Post = {
@@ -38,7 +23,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarImageUrl: string
+    avatarUrl: string
   }
   tweet: string
   imageUrl: string
@@ -50,51 +35,13 @@ type Profile = User & {
   posts?: Post[]
 }
 
-// TODO: リツイート、いいね機能、アバター画像追加後に削除する
-// const initialPost: Post = {
-//   id: 1,
-//   user: {
-//     id: 'u1',
-//     name: 'aliiiiii1',
-//     nickname: 'Alice',
-//     avatarImageUrl: '/path/to/avatar1.png',
-//   },
-//   tweet: 'This is a sample tweet from Alice.',
-//   imageUrl: 'https://source.unsplash.com/random',
-//   retweets: 5,
-//   likes: 20,
-// }
+type Props = {
+  profile: Profile
+  setProfile: React.Dispatch<React.SetStateAction<Profile>>
+}
 
-export const ProfileDetail: React.FC = () => {
+export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
   const [isModalOpen, setModalOpen] = useState(false)
-  const [profile, setProfile] = useState(initialUser as Profile)
-
-  const { userId } = useParams()
-
-  const handleGetProfile = (userId: number) => {
-    getProfile(userId)
-      .then((res) => {
-        if (res && res.data) {
-          console.log(res.data)
-          const resProfile: Profile = {
-            ...initialUser,
-            id: res.data.id,
-            name: res.data.name,
-            nickname: res.data.nickname,
-            birthdate: res.data.birthdate,
-            location: res.data.location,
-            websiteUrl: res.data.websiteUrl,
-            introduction: res.data.introduction,
-            avatarImageUrl: res.data.avatarImageUrl,
-            headerImageUrl: res.data.headerImageUrl,
-          }
-          setProfile(resProfile)
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -114,15 +61,11 @@ export const ProfileDetail: React.FC = () => {
     setModalOpen(!isModalOpen)
   }
 
-  useEffect(() => {
-    handleGetProfile(Number(userId))
-  }, [])
-
   return (
     <StyledProfileDetail>
       <div className="profileDetail">
         <div className="profileHeader">
-          {profile.headerImageUrl && <img src={profile.headerImageUrl} />}
+          {profile.headerUrl && <img src={profile.headerUrl} />}
         </div>
         <div className="profileBody">
           <div className="profileBodyTop">

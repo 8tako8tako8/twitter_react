@@ -17,38 +17,11 @@ type Post = {
   likes: number
 }
 
-const initialPosts: Post[] = [
-  {
-    id: 1,
-    user: {
-      id: 'u1',
-      name: 'aliiiiii1',
-      nickname: 'Alice',
-      avatarUrl: '/path/to/avatar1.png',
-    },
-    tweet: 'This is a sample tweet from Alice.',
-    imageUrl: 'https://source.unsplash.com/random',
-    retweets: 5,
-    likes: 20,
-  },
-  {
-    id: 2,
-    user: {
-      id: 'u1',
-      name: 'aliiiiii1',
-      nickname: 'Alice',
-      avatarUrl: '/path/to/avatar1.png',
-    },
-    tweet: 'This is a sample tweet from Alice.',
-    imageUrl: 'https://source.unsplash.com/random',
-    retweets: 5,
-    likes: 20,
-  },
-]
+type Props = {
+  posts: Post[]
+}
 
-export const VariousPosts: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [posts, setPosts] = useState<Post[]>(initialPosts)
+export const VariousPosts: React.FC<Props> = ({ posts }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
