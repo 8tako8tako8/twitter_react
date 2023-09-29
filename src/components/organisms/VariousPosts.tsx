@@ -42,12 +42,6 @@ export const VariousPosts: React.FC<Props> = ({ posts }) => {
       </Tabs>
       {currentTabIndex === 0 &&
         posts.map((post) => <Post key={post.id} post={post} />)}
-      {currentTabIndex === 1 &&
-        posts.map((post) => <Post key={post.id} post={post} />)}
-      {currentTabIndex === 2 &&
-        posts.map((post) => <Post key={post.id} post={post} />)}
-      {currentTabIndex === 3 &&
-        posts.map((post) => <Post key={post.id} post={post} />)}
     </StyledVariousPosts>
   )
 }
