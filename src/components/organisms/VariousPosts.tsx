@@ -1,4 +1,4 @@
-import { Pagination, Tab, Tabs } from '@mui/material'
+import { Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { styled } from 'styled-components'
 import { Post } from './Post'
@@ -22,13 +22,7 @@ type Props = {
 }
 
 export const VariousPosts: React.FC<Props> = ({ posts }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [totalPages, setTotalPages] = useState(1)
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
-
-  const handleChangePage = () => {}
 
   const handleTabChange = (_event: React.SyntheticEvent, tabIndex: number) => {
     setCurrentTabIndex(tabIndex)
@@ -54,26 +48,8 @@ export const VariousPosts: React.FC<Props> = ({ posts }) => {
         posts.map((post) => <Post key={post.id} post={post} />)}
       {currentTabIndex === 3 &&
         posts.map((post) => <Post key={post.id} post={post} />)}
-      <div className="pagination">
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          variant="outlined"
-          color="primary"
-          size="small"
-          onChange={handleChangePage}
-        />
-      </div>
     </StyledVariousPosts>
   )
 }
 
-const StyledVariousPosts = styled.div`
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-`
+const StyledVariousPosts = styled.div``
