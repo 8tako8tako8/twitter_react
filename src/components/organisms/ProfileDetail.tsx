@@ -1,7 +1,7 @@
 import { LocationOn, VerifiedUser } from '@mui/icons-material'
 import LinkIcon from '@mui/icons-material/Link'
 import CakeIcon from '@mui/icons-material/Cake'
-import { Avatar, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
@@ -52,12 +52,20 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
     <StyledProfileDetail>
       <div className="profileDetail">
         <div className="profileHeader">
-          {profile.headerUrl && <img src={profile.headerUrl} />}
+          {profile.headerUrl ? (
+            <img src={profile.headerUrl} />
+          ) : (
+            <img src={`${process.env.PUBLIC_URL}/dark.png`} />
+          )}
         </div>
         <div className="profileBody">
           <div className="profileBodyTop">
             <div className="profileAvatar">
-              <Avatar />
+              {profile.avatarUrl ? (
+                <img src={profile.avatarUrl} />
+              ) : (
+                <img src={`${process.env.PUBLIC_URL}/no_image.png`} />
+              )}
             </div>
             <Button className="profileBodyTopEditButton" onClick={toggleModal}>
               プロフィールを編集する
@@ -160,6 +168,12 @@ const StyledProfileDetail = styled.div`
 
   .profileAvatar {
     padding: 8px;
+
+    img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+    }
   }
 
   .profileBodySubInfo {
