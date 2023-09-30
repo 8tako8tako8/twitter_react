@@ -156,7 +156,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               fullWidth
               margin="normal"
               label="誕生日"
-              name="birthDate"
+              name="birthdate"
               type="date"
               value={profile.birthdate}
               onChange={handleInputChange}
