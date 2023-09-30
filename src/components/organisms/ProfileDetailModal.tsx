@@ -92,8 +92,11 @@ export const ProfileDetailModal: React.FC<Props> = ({
     <StyledProfileDetailModal>
       <Modal open={isModalOpen} onClose={toggleModal}>
         <StyledModalContent>
-          <h2>プロフィール編集</h2>
           <form onSubmit={handleSaveProfile}>
+            <StyledHeader>
+              <h2>プロフィール編集</h2>
+              <SaveButton type="submit">保存</SaveButton>
+            </StyledHeader>
             <label htmlFor="avatarImageInput">アバター画像</label>
             <input
               ref={avatarImageInputRef}
@@ -151,9 +154,6 @@ export const ProfileDetailModal: React.FC<Props> = ({
               value={profile.birthdate}
               onChange={handleInputChange}
             />
-            <SaveButtonField>
-              <SaveButton type="submit">保存</SaveButton>
-            </SaveButtonField>
           </form>
         </StyledModalContent>
       </Modal>
@@ -188,10 +188,9 @@ const StyledModalContent = styled.div`
   }
 `
 
-const SaveButtonField = styled.div`
+const StyledHeader = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+  justify-content: space-between;
 `
 
 const SaveButton = styled(Button)`
