@@ -300,6 +300,18 @@ const StyledModalContent = styled.div`
   padding: 20px;
   border-radius: 10px;
   outline: none;
+
+  label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  input[type='file'] {
+    display: block;
+    margin: 10px 0;
+    padding: 5px;
+  }
 `
 
 const SaveButtonField = styled.div`
