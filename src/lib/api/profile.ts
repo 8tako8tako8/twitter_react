@@ -15,3 +15,17 @@ export const saveProfile = (profile: SaveProfileParams) => {
     introduction,
   })
 }
+
+export const saveAvatarImage = (image: File) => {
+  const formData = new FormData()
+  formData.append('image', image)
+
+  return client.put('profile/avatar_image', formData)
+}
+
+export const saveHeaderImage = (image: File) => {
+  const formData = new FormData()
+  formData.append('image', image)
+
+  return client.put('profile/header_image', formData)
+}

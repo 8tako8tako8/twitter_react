@@ -2,9 +2,13 @@ import { LocationOn, VerifiedUser } from '@mui/icons-material'
 import LinkIcon from '@mui/icons-material/Link'
 import CakeIcon from '@mui/icons-material/Cake'
 import { Avatar, Button, Modal, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { styled } from 'styled-components'
-import { saveProfile } from '../../lib/api/profile'
+import {
+  saveAvatarImage,
+  saveHeaderImage,
+  saveProfile,
+} from '../../lib/api/profile'
 
 type User = {
   id: number
@@ -44,6 +48,9 @@ type Props = {
 export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
   const [isModalOpen, setModalOpen] = useState(false)
 
+  const avatarImageInputRef = useRef<HTMLInputElement>(null)
+  const headerImageInputRef = useRef<HTMLInputElement>(null)
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     setProfile({
@@ -52,14 +59,28 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
     })
   }
 
-  const handleSaveProfile = () => {
-    saveProfile(profile)
-      .then((res) => {
-        console.log(res.data)
-        // setErrorMessage('')
-      })
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const avatarImageFile = avatarImageInputRef.current?.files?.[0]
+    const avatarImagePromise = avatarImageFile
+      ? saveAvatarImage(avatarImageFile)
+      : Promise.resolve(null)
+
+    const headerImageFile = headerImageInputRef.current?.files?.[0]
+    const headerImagePromise = headerImageFile
+      ? saveHeaderImage(headerImageFile)
+      : Promise.resolve(null)
+
+    Promise.all([saveProfile(profile), avatarImagePromise, headerImagePromise])
+      .then(
+        ([profileImageResponse, avatarImageResponse, headerImageResponse]) => {
+          console.log('Profile Response:', profileImageResponse)
+          console.log('Avatar Response:', avatarImageResponse)
+          console.log('Header Response:', headerImageResponse)
+        }
+      )
       .catch((err) => {
-        // setErrorMessage((err.message || err) as string)
         console.error(err)
       })
     toggleModal()
@@ -116,6 +137,22 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
         <StyledModalContent>
           <h2>プロフィール編集</h2>
           <form onSubmit={handleSaveProfile}>
+            <label htmlFor="avatarImageInput">アバター画像</label>
+            <input
+              ref={avatarImageInputRef}
+              id="avatarImageInput"
+              className="avatarImageInput"
+              type="file"
+              accept="image/png, image/jpeg"
+            />
+            <label htmlFor="headerImageInput">ヘッダー画像</label>
+            <input
+              ref={headerImageInputRef}
+              id="headerImageInput"
+              className="headerImageInput"
+              type="file"
+              accept="image/png, image/jpeg"
+            />
             <TextField
               fullWidth
               margin="normal"
