@@ -83,18 +83,30 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
           </div>
           <div className="profileBodySubInfo">
             <div className="profileBodySubInfoLocation">
-              <LocationOn />
-              <p>{profile.location}</p>
+              {profile.location && (
+                <>
+                  <LocationOn />
+                  <p>{profile.location}</p>
+                </>
+              )}
             </div>
             <div className="profileBodySubInfoBirthDate">
-              <CakeIcon />
-              <p>{profile.birthdate}</p>
+              {profile.birthdate && (
+                <>
+                  <CakeIcon />
+                  <p>{profile.birthdate}</p>
+                </>
+              )}
             </div>
             <div className="profileBodySubInfoWebsiteUrl">
-              <LinkIcon />
-              <a target="_blank" href={profile.websiteUrl}>
-                {profile.websiteUrl}
-              </a>
+              {profile.websiteUrl && (
+                <>
+                  <LinkIcon />
+                  <a target="_blank" href={profile.websiteUrl}>
+                    {profile.websiteUrl}
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
