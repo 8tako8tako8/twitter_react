@@ -8,11 +8,14 @@ import styled from 'styled-components'
 import PermIdentityIcon from '@mui/icons-material/PermIdentity'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { useLocation } from 'react-router-dom'
+import { useAppSelector } from '../../App'
 
 const homeUrl = process.env.PUBLIC_URL
 
 export const SideBarOptionList: React.FC = () => {
   const location = useLocation()
+
+  const userId = useAppSelector((state) => state.user.userInfo?.userId)
 
   const SIDEBAR_LIST = [
     {
@@ -42,7 +45,7 @@ export const SideBarOptionList: React.FC = () => {
     {
       text: 'プロフィール',
       icon: PermIdentityIcon,
-      linkTo: `${homeUrl}/profile`,
+      linkTo: userId !== null ? `${homeUrl}/users/${userId}` : `${homeUrl}`,
       isActive: location.pathname === '/profile',
     },
     {
