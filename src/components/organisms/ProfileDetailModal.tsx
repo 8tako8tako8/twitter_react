@@ -76,18 +76,15 @@ export const ProfileDetailModal: React.FC<Props> = ({
 
     Promise.all([saveProfile(profile), avatarImagePromise, headerImagePromise])
       .then(([, avatarImageResponse, headerImageResponse]) => {
-        if (avatarImageResponse) {
-          setProfile({
-            ...profile,
-            avatarUrl: avatarImageResponse.data.avatarImageUrl,
-          })
-        }
-        if (headerImageResponse) {
-          setProfile({
-            ...profile,
-            headerUrl: headerImageResponse.data.headerImageUrl,
-          })
-        }
+        const avatarUrl =
+          avatarImageResponse?.data.avatarImageUrl || profile.avatarUrl
+        const headerUrl =
+          headerImageResponse?.data.headerImageUrl || profile.headerUrl
+        setProfile({
+          ...profile,
+          avatarUrl: avatarUrl,
+          headerUrl: headerUrl,
+        })
       })
       .catch((err) => {
         console.error(err)
