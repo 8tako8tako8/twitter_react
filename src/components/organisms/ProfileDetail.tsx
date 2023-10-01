@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
+import { useAppSelector } from '../../App'
 
 type User = {
   id: number
@@ -44,6 +45,8 @@ type Props = {
 export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
   const [isModalOpen, setModalOpen] = useState(false)
 
+  const myUserId = useAppSelector((state) => state.user.userInfo?.userId)
+
   const toggleModal = () => {
     setModalOpen(!isModalOpen)
   }
@@ -67,9 +70,14 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
                 <img src={`${process.env.PUBLIC_URL}/no_image.png`} />
               )}
             </div>
-            <Button className="profileBodyTopEditButton" onClick={toggleModal}>
-              プロフィールを編集する
-            </Button>
+            {myUserId === profile.id && (
+              <Button
+                className="profileBodyTopEditButton"
+                onClick={toggleModal}
+              >
+                プロフィールを編集する
+              </Button>
+            )}
           </div>
           <h3>
             {profile.nickname}
