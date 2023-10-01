@@ -108,7 +108,7 @@ export const Profile: React.FC = () => {
 
   useEffect(() => {
     handleGetProfile(Number(userId))
-  }, [])
+  }, [userId])
 
   return (
     <StyledHome>
