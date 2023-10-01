@@ -123,6 +123,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               label="ニックネーム"
               name="nickname"
               value={profile.nickname}
+              InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
             <TextField
@@ -131,6 +132,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               label="自己紹介"
               name="introduction"
               value={profile.introduction}
+              InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
             <TextField
@@ -139,6 +141,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               label="ウェブサイトURL"
               name="websiteUrl"
               value={profile.websiteUrl}
+              InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
             <TextField
@@ -147,6 +150,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               label="場所"
               name="location"
               value={profile.location}
+              InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
             <TextField
@@ -156,6 +160,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               name="birthdate"
               type="date"
               value={profile.birthdate}
+              InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
           </form>
