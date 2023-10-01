@@ -1,11 +1,15 @@
 import { Button, Modal, TextField } from '@mui/material'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import {
   saveAvatarImage,
   saveHeaderImage,
   saveProfile,
 } from '../../lib/api/profile'
+import {
+  ProfileErrors,
+  validateProfile,
+} from '../../validators/profileValidator'
 
 type User = {
   id: number
@@ -50,6 +54,8 @@ export const ProfileDetailModal: React.FC<Props> = ({
   profile,
   setProfile,
 }) => {
+  const [validationErrors, setValidationErrors] = useState<ProfileErrors>({})
+
   const avatarImageInputRef = useRef<HTMLInputElement>(null)
   const headerImageInputRef = useRef<HTMLInputElement>(null)
 
@@ -63,6 +69,13 @@ export const ProfileDetailModal: React.FC<Props> = ({
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault()
+
+    setValidationErrors({})
+    const errors = validateProfile(profile as User)
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors)
+      return
+    }
 
     const avatarImageFile = avatarImageInputRef.current?.files?.[0]
     const avatarImagePromise = avatarImageFile
@@ -90,6 +103,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
         console.error(err)
       })
     toggleModal()
+    setValidationErrors({})
   }
 
   return (
@@ -125,6 +139,8 @@ export const ProfileDetailModal: React.FC<Props> = ({
               value={profile.nickname}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
+              error={Boolean(validationErrors.nickname)}
+              helperText={validationErrors.nickname}
             />
             <TextField
               fullWidth
@@ -134,6 +150,8 @@ export const ProfileDetailModal: React.FC<Props> = ({
               value={profile.introduction}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
+              error={Boolean(validationErrors.introduction)}
+              helperText={validationErrors.introduction}
             />
             <TextField
               fullWidth
@@ -152,6 +170,8 @@ export const ProfileDetailModal: React.FC<Props> = ({
               value={profile.location}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
+              error={Boolean(validationErrors.location)}
+              helperText={validationErrors.location}
             />
             <TextField
               fullWidth
