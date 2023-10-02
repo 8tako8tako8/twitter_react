@@ -115,19 +115,19 @@ export const ProfileDetailModal: React.FC<Props> = ({
               <h2>プロフィール編集</h2>
               <SaveButton type="submit">保存</SaveButton>
             </StyledHeader>
-            <label htmlFor="avatarImageInput">アバター画像</label>
-            <input
-              ref={avatarImageInputRef}
-              id="avatarImageInput"
-              className="avatarImageInput"
-              type="file"
-              accept="image/png, image/jpeg"
-            />
             <label htmlFor="headerImageInput">ヘッダー画像</label>
             <input
               ref={headerImageInputRef}
               id="headerImageInput"
               className="headerImageInput"
+              type="file"
+              accept="image/png, image/jpeg"
+            />
+            <label htmlFor="avatarImageInput">アバター画像</label>
+            <input
+              ref={avatarImageInputRef}
+              id="avatarImageInput"
+              className="avatarImageInput"
               type="file"
               accept="image/png, image/jpeg"
             />
