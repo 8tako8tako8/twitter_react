@@ -45,7 +45,7 @@ type Props = {
 export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
   const [isModalOpen, setModalOpen] = useState(false)
 
-  const myUserId = useAppSelector((state) => state.user.userInfo?.userId)
+  const myUserId = useAppSelector((state) => state.user.userInfo?.id)
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen)

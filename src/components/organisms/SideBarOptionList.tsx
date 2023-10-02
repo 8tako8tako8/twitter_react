@@ -15,7 +15,7 @@ const homeUrl = process.env.PUBLIC_URL
 export const SideBarOptionList: React.FC = () => {
   const location = useLocation()
 
-  const userId = useAppSelector((state) => state.user.userInfo?.userId)
+  const userId = useAppSelector((state) => state.user.userInfo?.id)
 
   const SIDEBAR_LIST = [
     {

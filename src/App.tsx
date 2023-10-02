@@ -30,9 +30,8 @@ const App: React.FC = () => {
     try {
       const res = await getCurrentUser()
       if (res && res.data) {
-        const { email, name, nickname, image } = res.data
-        const userId = res.data.id
-        dispatch(setCurrentUser({ email, name, nickname, image, userId }))
+        const { email, name, nickname, image, id } = res.data
+        dispatch(setCurrentUser({ email, name, nickname, image, id }))
       }
     } catch (err) {
       console.error(err)
