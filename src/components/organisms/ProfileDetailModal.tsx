@@ -1,4 +1,4 @@
-import { Button, Modal, TextField } from '@mui/material'
+import { Button, Modal } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import {
@@ -10,6 +10,7 @@ import {
   ProfileErrors,
   validateProfile,
 } from '../../validators/profileValidator'
+import { ProfileDetailModalTextField } from './ProfileDetailModalTextField'
 
 type User = {
   id: number
@@ -59,6 +60,54 @@ export const ProfileDetailModal: React.FC<Props> = ({
 
   const avatarImageInputRef = useRef<HTMLInputElement>(null)
   const headerImageInputRef = useRef<HTMLInputElement>(null)
+
+  const PROFILE_FIELD_LIST = [
+    {
+      key: 'nickname',
+      name: 'nickname',
+      label: 'ニックネーム',
+      value: editingProfile.nickname,
+      type: 'text',
+      error: Boolean(validationErrors.nickname),
+      helperText: validationErrors.nickname,
+    },
+    {
+      key: 'introduction',
+      name: 'introduction',
+      label: '自己紹介',
+      value: editingProfile.introduction,
+      type: 'text',
+      error: Boolean(validationErrors.introduction),
+      helperText: validationErrors.introduction,
+    },
+    {
+      key: 'websiteUrl',
+      name: 'websiteUrl',
+      label: 'ウェブサイトURL',
+      value: editingProfile.websiteUrl,
+      type: 'text',
+      error: false,
+      helperText: '',
+    },
+    {
+      key: 'location',
+      name: 'location',
+      label: '場所',
+      value: editingProfile.location,
+      type: 'text',
+      error: Boolean(validationErrors.location),
+      helperText: validationErrors.location,
+    },
+    {
+      key: 'birthdate',
+      name: 'birthdate',
+      label: '誕生日',
+      value: editingProfile.birthdate,
+      type: 'date',
+      error: false,
+      helperText: '',
+    },
+  ]
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -140,58 +189,18 @@ export const ProfileDetailModal: React.FC<Props> = ({
               type="file"
               accept="image/png, image/jpeg"
             />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="ニックネーム"
-              name="nickname"
-              value={editingProfile.nickname}
-              InputLabelProps={{ shrink: true }}
-              onChange={handleInputChange}
-              error={Boolean(validationErrors.nickname)}
-              helperText={validationErrors.nickname}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="自己紹介"
-              name="introduction"
-              value={editingProfile.introduction}
-              InputLabelProps={{ shrink: true }}
-              onChange={handleInputChange}
-              error={Boolean(validationErrors.introduction)}
-              helperText={validationErrors.introduction}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="ウェブサイトURL"
-              name="websiteUrl"
-              value={editingProfile.websiteUrl}
-              InputLabelProps={{ shrink: true }}
-              onChange={handleInputChange}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="場所"
-              name="location"
-              value={editingProfile.location}
-              InputLabelProps={{ shrink: true }}
-              onChange={handleInputChange}
-              error={Boolean(validationErrors.location)}
-              helperText={validationErrors.location}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="誕生日"
-              name="birthdate"
-              type="date"
-              value={editingProfile.birthdate}
-              InputLabelProps={{ shrink: true }}
-              onChange={handleInputChange}
-            />
+            {PROFILE_FIELD_LIST.map((item) => (
+              <ProfileDetailModalTextField
+                key={item.key}
+                label={item.label}
+                name={item.name}
+                value={item.value}
+                type={item.type}
+                handleInputChange={handleInputChange}
+                error={item.error}
+                helperText={item.helperText}
+              />
+            ))}
           </form>
         </StyledModalContent>
       </Modal>
