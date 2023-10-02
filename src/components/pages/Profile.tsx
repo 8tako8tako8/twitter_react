@@ -74,19 +74,31 @@ export const Profile: React.FC = () => {
     getProfile(userId)
       .then((res) => {
         if (res && res.data) {
+          const {
+            id,
+            name,
+            nickname,
+            birthdate,
+            location,
+            websiteUrl,
+            introduction,
+            avatarImageUrl,
+            headerImageUrl,
+          } = res.data
           const resProfile: Profile = {
             ...initialUser,
-            id: res.data.id,
-            name: res.data.name,
-            nickname: res.data.nickname,
-            birthdate: res.data.birthdate,
-            location: res.data.location,
-            websiteUrl: res.data.websiteUrl,
-            introduction: res.data.introduction,
-            avatarUrl: res.data.avatarImageUrl,
-            headerUrl: res.data.headerImageUrl,
+            id: id,
+            name: name,
+            nickname: nickname,
+            birthdate: birthdate,
+            location: location,
+            websiteUrl: websiteUrl,
+            introduction: introduction,
+            avatarUrl: avatarImageUrl,
+            headerUrl: headerImageUrl,
           }
           setProfile(resProfile)
+
           const resPosts: Post[] = (res.data.tweets as Post[]).map((tweet) => {
             return {
               ...initialPost,
