@@ -109,7 +109,6 @@ export const ProfileDetailModal: React.FC<Props> = ({
         console.error(err)
       })
     toggleModal()
-    setValidationErrors({})
   }
 
   useEffect(() => {
