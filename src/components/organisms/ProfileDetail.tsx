@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
 import { useAppSelector } from '../../App'
+import { ProfileSubInfo } from './ProfileSubInfo'
 
 type User = {
   id: number
@@ -51,6 +52,27 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
     setModalOpen(!isModalOpen)
   }
 
+  const PROFILE_SUB_INFO_LIST = [
+    {
+      class: 'profileBodySubInfoLocation',
+      key: 'location',
+      subInfo: profile.location,
+      icon: LocationOn,
+    },
+    {
+      class: 'profileBodySubInfoBirthdate',
+      key: 'birthdate',
+      subInfo: profile.birthdate,
+      icon: CakeIcon,
+    },
+    {
+      class: 'profileBodySubInfoWebsiteUrl',
+      key: 'websiteUrl',
+      subInfo: profile.websiteUrl,
+      icon: LinkIcon,
+    },
+  ]
+
   return (
     <StyledProfileDetail>
       <div className="profileDetail">
@@ -90,32 +112,11 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
             <p>{profile.introduction}</p>
           </div>
           <div className="profileBodySubInfo">
-            <div className="profileBodySubInfoLocation">
-              {profile.location && (
-                <>
-                  <LocationOn />
-                  <p>{profile.location}</p>
-                </>
-              )}
-            </div>
-            <div className="profileBodySubInfoBirthDate">
-              {profile.birthdate && (
-                <>
-                  <CakeIcon />
-                  <p>{profile.birthdate}</p>
-                </>
-              )}
-            </div>
-            <div className="profileBodySubInfoWebsiteUrl">
-              {profile.websiteUrl && (
-                <>
-                  <LinkIcon />
-                  <a target="_blank" href={profile.websiteUrl}>
-                    {profile.websiteUrl}
-                  </a>
-                </>
-              )}
-            </div>
+            {PROFILE_SUB_INFO_LIST.map((item) => (
+              <ProfileSubInfo key={item.key} subInfo={item.subInfo}>
+                <item.icon />
+              </ProfileSubInfo>
+            ))}
           </div>
         </div>
       </div>
@@ -200,22 +201,5 @@ const StyledProfileDetail = styled.div`
     display: flex;
     align-items: center;
     color: gray;
-  }
-
-  .profileBodySubInfoLocation {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-  }
-
-  .profileBodySubInfoBirthDate {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-  }
-
-  .profileBodySubInfoWebsiteUrl {
-    display: flex;
-    align-items: center;
   }
 `
