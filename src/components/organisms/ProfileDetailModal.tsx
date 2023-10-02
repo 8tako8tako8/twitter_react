@@ -1,5 +1,5 @@
 import { Button, Modal, TextField } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import {
   saveAvatarImage,
@@ -54,6 +54,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
   profile,
   setProfile,
 }) => {
+  const [editingProfile, setEditingProfile] = useState<Profile>({ ...profile })
   const [validationErrors, setValidationErrors] = useState<ProfileErrors>({})
 
   const avatarImageInputRef = useRef<HTMLInputElement>(null)
@@ -61,8 +62,8 @@ export const ProfileDetailModal: React.FC<Props> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
-    setProfile({
-      ...profile,
+    setEditingProfile({
+      ...editingProfile,
       [name]: value,
     })
   }
@@ -71,7 +72,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
     e.preventDefault()
 
     setValidationErrors({})
-    const errors = validateProfile(profile as User)
+    const errors = validateProfile(editingProfile as User)
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors)
       return
@@ -87,16 +88,21 @@ export const ProfileDetailModal: React.FC<Props> = ({
       ? saveHeaderImage(headerImageFile)
       : Promise.resolve(null)
 
-    Promise.all([saveProfile(profile), avatarImagePromise, headerImagePromise])
-      .then(([, avatarImageResponse, headerImageResponse]) => {
-        const avatarUrl =
-          avatarImageResponse?.data.avatarImageUrl || profile.avatarUrl
-        const headerUrl =
-          headerImageResponse?.data.headerImageUrl || profile.headerUrl
+    Promise.all([
+      saveProfile(editingProfile),
+      avatarImagePromise,
+      headerImagePromise,
+    ])
+      .then(([profileResponse, avatarImageResponse, headerImageResponse]) => {
+        const resProfile: Profile = profileResponse.data
+        const resAvatarUrl =
+          avatarImageResponse?.data.avatarImageUrl || editingProfile.avatarUrl
+        const resHeaderUrl =
+          headerImageResponse?.data.headerImageUrl || editingProfile.headerUrl
         setProfile({
-          ...profile,
-          avatarUrl: avatarUrl,
-          headerUrl: headerUrl,
+          ...resProfile,
+          avatarUrl: resAvatarUrl,
+          headerUrl: resHeaderUrl,
         })
       })
       .catch((err) => {
@@ -105,6 +111,10 @@ export const ProfileDetailModal: React.FC<Props> = ({
     toggleModal()
     setValidationErrors({})
   }
+
+  useEffect(() => {
+    setEditingProfile({ ...profile })
+  }, [profile])
 
   return (
     <StyledProfileDetailModal>
@@ -136,7 +146,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               margin="normal"
               label="ニックネーム"
               name="nickname"
-              value={profile.nickname}
+              value={editingProfile.nickname}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
               error={Boolean(validationErrors.nickname)}
@@ -147,7 +157,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               margin="normal"
               label="自己紹介"
               name="introduction"
-              value={profile.introduction}
+              value={editingProfile.introduction}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
               error={Boolean(validationErrors.introduction)}
@@ -158,7 +168,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               margin="normal"
               label="ウェブサイトURL"
               name="websiteUrl"
-              value={profile.websiteUrl}
+              value={editingProfile.websiteUrl}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
@@ -167,7 +177,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               margin="normal"
               label="場所"
               name="location"
-              value={profile.location}
+              value={editingProfile.location}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
               error={Boolean(validationErrors.location)}
@@ -179,7 +189,7 @@ export const ProfileDetailModal: React.FC<Props> = ({
               label="誕生日"
               name="birthdate"
               type="date"
-              value={profile.birthdate}
+              value={editingProfile.birthdate}
               InputLabelProps={{ shrink: true }}
               onChange={handleInputChange}
             />
