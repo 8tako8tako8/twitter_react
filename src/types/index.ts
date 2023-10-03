@@ -11,3 +11,12 @@ export interface LoginParams {
   email: string
   password: string
 }
+
+// プロフィール更新
+export interface SaveProfileParams {
+  nickname: string
+  birthdate: string
+  location: string
+  websiteUrl: string
+  introduction: string
+}

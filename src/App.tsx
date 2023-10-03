@@ -14,6 +14,7 @@ import { getCurrentUser } from './lib/api/auth'
 import { setCurrentUser } from './redux/userSlice'
 import { Loading } from './components/pages/Loading'
 import { PostDetail } from './components/pages/PostDetail'
+import { Profile } from './components/pages/Profile'
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
@@ -29,8 +30,8 @@ const App: React.FC = () => {
     try {
       const res = await getCurrentUser()
       if (res && res.data) {
-        const { email, name, nickname, image } = res.data
-        dispatch(setCurrentUser({ email, name, nickname, image }))
+        const { email, name, nickname, image, id } = res.data
+        dispatch(setCurrentUser({ email, name, nickname, image, id }))
       }
     } catch (err) {
       console.error(err)
@@ -60,6 +61,10 @@ const App: React.FC = () => {
         <Route
           path={homeUrl + '/tweets/:tweetId'}
           element={<PrivateRoute children={<PostDetail />} />}
+        />
+        <Route
+          path={homeUrl + '/users/:userId'}
+          element={<PrivateRoute children={<Profile />} />}
         />
         <Route path="*" element={<Error />} />
       </Routes>
