@@ -1,11 +1,21 @@
 import {
   ChatBubbleOutline,
   FavoriteBorder,
+  MoreVert,
   Repeat,
   VerifiedUser,
 } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
-import React from 'react'
+import {
+  Avatar,
+  Button,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+} from '@mui/material'
+import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -31,6 +41,41 @@ const homeUrl = process.env.PUBLIC_URL
 
 export const Post: React.FC<Props> = (props) => {
   const { post } = props
+  const [open, setOpen] = useState(false)
+  const anchorRef = useRef<HTMLButtonElement>(null)
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen)
+  }
+
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      setOpen(false)
+    } else if (event.key === 'Escape') {
+      setOpen(false)
+    }
+  }
+
+  const prevOpen = React.useRef(open)
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current!.focus()
+    }
+
+    prevOpen.current = open
+  }, [open])
 
   return (
     <StyledPost>
@@ -39,9 +84,9 @@ export const Post: React.FC<Props> = (props) => {
           <Avatar />
         </div>
         <div className="postBody">
-          <Link to={`${homeUrl}/tweets/${post.id}`} className="postLink">
-            <div className="postHeader">
-              <div className="postHeaderText">
+          <div className="postHeader">
+            <div className="postHeaderText">
+              <PostHeaderText>
                 <h3>
                   {post.user.nickname}
                   <span className="postHeaderSpecial">
@@ -49,12 +94,63 @@ export const Post: React.FC<Props> = (props) => {
                     {post.user.name}
                   </span>
                 </h3>
-              </div>
+                {true && (
+                  <div>
+                    <Button
+                      ref={anchorRef}
+                      id="composition-button"
+                      aria-controls={open ? 'composition-menu' : undefined}
+                      aria-expanded={open ? 'true' : undefined}
+                      aria-haspopup="true"
+                      onClick={handleToggle}
+                    >
+                      <MoreVert />
+                    </Button>
+                    <Popper
+                      open={open}
+                      anchorEl={anchorRef.current}
+                      role={undefined}
+                      placement="bottom-start"
+                      transition
+                      disablePortal
+                    >
+                      {({ TransitionProps, placement }) => (
+                        <Grow
+                          {...TransitionProps}
+                          style={{
+                            transformOrigin:
+                              placement === 'bottom-start'
+                                ? 'left top'
+                                : 'left bottom',
+                          }}
+                        >
+                          <Paper>
+                            <ClickAwayListener onClickAway={handleClose}>
+                              <MenuList
+                                autoFocusItem={open}
+                                id="composition-menu"
+                                aria-labelledby="composition-button"
+                                onKeyDown={handleListKeyDown}
+                              >
+                                <MenuItem onClick={handleClose}>
+                                  ツイートを削除する
+                                </MenuItem>
+                              </MenuList>
+                            </ClickAwayListener>
+                          </Paper>
+                        </Grow>
+                      )}
+                    </Popper>
+                  </div>
+                )}
+              </PostHeaderText>
+            </div>
+            <Link to={`${homeUrl}/tweets/${post.id}`} className="postLink">
               <div className="postHeaderDescription">
                 <p>{post.tweet}</p>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
           {post.imageUrl && <img src={post.imageUrl} />}
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
@@ -109,11 +205,6 @@ const StyledPost = styled.div`
     word-wrap: break-word;
   }
 
-  .postHeaderText > h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
-
   .postBadge {
     font-size: 14px !important;
     color: var(--twitter-color);
@@ -127,5 +218,15 @@ const StyledPost = styled.div`
 
   .postAvatar {
     padding: 15px;
+  }
+`
+
+const PostHeaderText = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 15px;
+    margin-bottom: 5px;
   }
 `
