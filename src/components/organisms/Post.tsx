@@ -38,16 +38,18 @@ type Post = {
 
 type Props = {
   post: Post
+  myself: boolean
 }
 
 const homeUrl = process.env.PUBLIC_URL
 
-export const Post: React.FC<Props> = (props) => {
-  const { post } = props
+export const Post: React.FC<Props> = ({ post, myself }) => {
   const [openMenu, setOpenMenu] = useState(false)
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
+
+  const isDeleteable = true
 
   const handleToggle = () => {
     setOpenMenu((prevOpen) => !prevOpen)
@@ -120,32 +122,36 @@ export const Post: React.FC<Props> = (props) => {
 
   return (
     <StyledPost>
-      <Snackbar
-        open={openSuccessMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseSuccessMessage}
-      >
-        <Alert
-          onClose={handleCloseSuccessMessage}
-          severity="success"
-          sx={{ width: '100%' }}
-        >
-          ツイートを削除しました
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openErrorMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseErrorMessage}
-      >
-        <Alert
-          onClose={handleCloseErrorMessage}
-          severity="error"
-          sx={{ width: '100%' }}
-        >
-          ツイートの削除に失敗しました
-        </Alert>
-      </Snackbar>
+      {myself && (
+        <>
+          <Snackbar
+            open={openSuccessMessage}
+            autoHideDuration={6000}
+            onClose={handleCloseSuccessMessage}
+          >
+            <Alert
+              onClose={handleCloseSuccessMessage}
+              severity="success"
+              sx={{ width: '100%' }}
+            >
+              ツイートを削除しました
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openErrorMessage}
+            autoHideDuration={6000}
+            onClose={handleCloseErrorMessage}
+          >
+            <Alert
+              onClose={handleCloseErrorMessage}
+              severity="error"
+              sx={{ width: '100%' }}
+            >
+              ツイートの削除に失敗しました
+            </Alert>
+          </Snackbar>
+        </>
+      )}
       <div className="post">
         <div className="postAvatar">
           <Avatar />
@@ -161,7 +167,7 @@ export const Post: React.FC<Props> = (props) => {
                     {post.user.name}
                   </span>
                 </h3>
-                {true && (
+                {isDeleteable && (
                   <div>
                     <Button
                       ref={anchorRef}

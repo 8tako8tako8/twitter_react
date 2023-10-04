@@ -5,6 +5,7 @@ import { ProfileDetail } from '../organisms/ProfileDetail'
 import { VariousPosts } from '../organisms/VariousPosts'
 import { useParams } from 'react-router-dom'
 import { getProfile } from '../../lib/api/profile'
+import { useAppSelector } from '../../App'
 
 type User = {
   id: number
@@ -69,6 +70,8 @@ export const Profile: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([])
 
   const { userId } = useParams()
+  const myUserId = useAppSelector((state) => state.user.userInfo?.id)
+  const myself = userId === myUserId?.toString()
 
   const handleGetProfile = (userId: number) => {
     getProfile(userId)
@@ -128,8 +131,12 @@ export const Profile: React.FC = () => {
         <SideBar />
       </div>
       <div className="profile">
-        <ProfileDetail profile={profile} setProfile={setProfile} />
-        <VariousPosts posts={posts} />
+        <ProfileDetail
+          profile={profile}
+          setProfile={setProfile}
+          myself={myself}
+        />
+        <VariousPosts posts={posts} myself={myself} />
       </div>
     </StyledHome>
   )
