@@ -6,6 +6,7 @@ import {
   VerifiedUser,
 } from '@mui/icons-material'
 import {
+  Alert,
   Avatar,
   Button,
   ClickAwayListener,
@@ -14,6 +15,7 @@ import {
   MenuList,
   Paper,
   Popper,
+  Snackbar,
 } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -43,6 +45,8 @@ const homeUrl = process.env.PUBLIC_URL
 export const Post: React.FC<Props> = (props) => {
   const { post } = props
   const [openMenu, setOpenMenu] = useState(false)
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
+  const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
@@ -60,6 +64,28 @@ export const Post: React.FC<Props> = (props) => {
     setOpenMenu(false)
   }
 
+  const handleCloseSuccessMessage = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenSuccessMessage(false)
+  }
+
+  const handleCloseErrorMessage = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpenErrorMessage(false)
+  }
+
   function handleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
       event.preventDefault()
@@ -73,9 +99,12 @@ export const Post: React.FC<Props> = (props) => {
     deletePost(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('ツイート削除に失敗しました')
+
+        setOpenSuccessMessage(true)
       })
       .catch((err) => {
         console.error(err)
+        setOpenErrorMessage(true)
       })
     setOpenMenu(false)
   }
@@ -91,6 +120,32 @@ export const Post: React.FC<Props> = (props) => {
 
   return (
     <StyledPost>
+      <Snackbar
+        open={openSuccessMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSuccessMessage}
+      >
+        <Alert
+          onClose={handleCloseSuccessMessage}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          ツイートを削除しました
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openErrorMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorMessage}
+      >
+        <Alert
+          onClose={handleCloseErrorMessage}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          ツイートの削除に失敗しました
+        </Alert>
+      </Snackbar>
       <div className="post">
         <div className="postAvatar">
           <Avatar />
