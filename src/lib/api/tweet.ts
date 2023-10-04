@@ -26,3 +26,7 @@ export const postTweetImage = (tweetId: number, image: File) => {
 
   return client.post(`images`, formData)
 }
+
+export const deletePost = (tweetId: number) => {
+  return client.delete(`tweets/${tweetId}`)
+}

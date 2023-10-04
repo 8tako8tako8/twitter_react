@@ -15,9 +15,10 @@ import {
   Paper,
   Popper,
 } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { deletePost } from '../../lib/api/tweet'
 
 type Post = {
   id: number
@@ -41,14 +42,14 @@ const homeUrl = process.env.PUBLIC_URL
 
 export const Post: React.FC<Props> = (props) => {
   const { post } = props
-  const [open, setOpen] = useState(false)
+  const [openMenu, setOpenMenu] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
 
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen)
+    setOpenMenu((prevOpen) => !prevOpen)
   }
 
-  const handleClose = (event: Event | React.SyntheticEvent) => {
+  const handleCloseMenu = (event: Event | React.SyntheticEvent) => {
     if (
       anchorRef.current &&
       anchorRef.current.contains(event.target as HTMLElement)
@@ -56,26 +57,37 @@ export const Post: React.FC<Props> = (props) => {
       return
     }
 
-    setOpen(false)
+    setOpenMenu(false)
   }
 
   function handleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
       event.preventDefault()
-      setOpen(false)
+      setOpenMenu(false)
     } else if (event.key === 'Escape') {
-      setOpen(false)
+      setOpenMenu(false)
     }
   }
 
-  const prevOpen = React.useRef(open)
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
+  const handleDeletePost = () => {
+    deletePost(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ツイート削除に失敗しました')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    setOpenMenu(false)
+  }
+
+  const prevOpen = useRef(openMenu)
+  useEffect(() => {
+    if (prevOpen.current === true && openMenu === false) {
       anchorRef.current!.focus()
     }
 
-    prevOpen.current = open
-  }, [open])
+    prevOpen.current = openMenu
+  }, [openMenu])
 
   return (
     <StyledPost>
@@ -99,15 +111,15 @@ export const Post: React.FC<Props> = (props) => {
                     <Button
                       ref={anchorRef}
                       id="composition-button"
-                      aria-controls={open ? 'composition-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
+                      aria-controls={openMenu ? 'composition-menu' : undefined}
+                      aria-expanded={openMenu ? 'true' : undefined}
                       aria-haspopup="true"
                       onClick={handleToggle}
                     >
                       <MoreVert />
                     </Button>
                     <Popper
-                      open={open}
+                      open={openMenu}
                       anchorEl={anchorRef.current}
                       role={undefined}
                       placement="bottom-start"
@@ -125,14 +137,14 @@ export const Post: React.FC<Props> = (props) => {
                           }}
                         >
                           <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
+                            <ClickAwayListener onClickAway={handleCloseMenu}>
                               <MenuList
-                                autoFocusItem={open}
+                                autoFocusItem={openMenu}
                                 id="composition-menu"
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                               >
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={handleDeletePost}>
                                   ツイートを削除する
                                 </MenuItem>
                               </MenuList>
