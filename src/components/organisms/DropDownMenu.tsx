@@ -11,21 +11,41 @@ import styled from 'styled-components'
 
 type Props = {
   open: boolean
-  handleToggle: () => void
-  handleClose: (event: Event | React.SyntheticEvent) => void
-  handleListKeyDown: (event: React.KeyboardEvent) => void
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   anchorRef: React.MutableRefObject<HTMLButtonElement | null>
   children: React.ReactNode
 }
 
 export const DropDownMenu: React.FC<Props> = ({
   open,
-  handleToggle,
-  handleClose,
-  handleListKeyDown,
+  setOpen,
   anchorRef,
   children,
 }) => {
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  const handleListKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      setOpen(false)
+    } else if (event.key === 'Escape') {
+      setOpen(false)
+    }
+  }
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen)
+  }
+
   return (
     <StyledDropDownMenu>
       <Button

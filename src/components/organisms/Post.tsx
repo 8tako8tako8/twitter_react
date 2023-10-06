@@ -39,21 +39,6 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
 
-  const handleToggle = () => {
-    setOpenMenu((prevOpen) => !prevOpen)
-  }
-
-  const handleCloseMenu = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return
-    }
-
-    setOpenMenu(false)
-  }
-
   const handleCloseSuccessMessage = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -74,15 +59,6 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
     }
 
     setOpenErrorMessage(false)
-  }
-
-  function handleListKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Tab') {
-      event.preventDefault()
-      setOpenMenu(false)
-    } else if (event.key === 'Escape') {
-      setOpenMenu(false)
-    }
   }
 
   const handleDeletePost = () => {
@@ -142,9 +118,7 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
                 {myself && (
                   <DropDownMenu
                     open={openMenu}
-                    handleToggle={handleToggle}
-                    handleClose={handleCloseMenu}
-                    handleListKeyDown={handleListKeyDown}
+                    setOpen={setOpenMenu}
                     anchorRef={anchorRef}
                   >
                     <MenuItem onClick={handleDeletePost}>
