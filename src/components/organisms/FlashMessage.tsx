@@ -3,17 +3,28 @@ import styled from 'styled-components'
 
 type Props = {
   open: boolean
-  handleCloseMessage: () => void
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   severity?: AlertColor
   children: React.ReactNode
 }
 
 export const FlashMessage: React.FC<Props> = ({
   open,
-  handleCloseMessage,
+  setOpen,
   severity = 'success',
   children,
 }) => {
+  const handleCloseMessage = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
+
   return (
     <StyledFlashMessage>
       <Snackbar

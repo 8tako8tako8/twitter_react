@@ -39,28 +39,6 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
 
-  const handleCloseSuccessMessage = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpenSuccessMessage(false)
-  }
-
-  const handleCloseErrorMessage = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpenErrorMessage(false)
-  }
-
   const handleDeletePost = () => {
     deletePost(post.id)
       .then((res) => {
@@ -88,14 +66,14 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
     <StyledPost>
       <FlashMessage
         open={openSuccessMessage}
-        handleCloseMessage={handleCloseSuccessMessage}
+        setOpen={setOpenSuccessMessage}
         severity="success"
       >
         削除しました
       </FlashMessage>
       <FlashMessage
         open={openErrorMessage}
-        handleCloseMessage={handleCloseErrorMessage}
+        setOpen={setOpenErrorMessage}
         severity="error"
       >
         削除に失敗しました
