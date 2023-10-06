@@ -1,25 +1,16 @@
 import {
   ChatBubbleOutline,
   FavoriteBorder,
-  MoreVert,
   Repeat,
   VerifiedUser,
 } from '@mui/icons-material'
-import {
-  Avatar,
-  Button,
-  ClickAwayListener,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from '@mui/material'
+import { Avatar, MenuItem } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { deletePost } from '../../lib/api/tweet'
 import { FlashMessage } from './FlashMessage'
+import { DropDownMenu } from './DropDownMenu'
 
 type Post = {
   id: number
@@ -149,53 +140,17 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
                   </span>
                 </h3>
                 {myself && (
-                  <div>
-                    <Button
-                      ref={anchorRef}
-                      id="composition-button"
-                      aria-controls={openMenu ? 'composition-menu' : undefined}
-                      aria-expanded={openMenu ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleToggle}
-                    >
-                      <MoreVert />
-                    </Button>
-                    <Popper
-                      open={openMenu}
-                      anchorEl={anchorRef.current}
-                      role={undefined}
-                      placement="bottom-start"
-                      transition
-                      disablePortal
-                    >
-                      {({ TransitionProps, placement }) => (
-                        <Grow
-                          {...TransitionProps}
-                          style={{
-                            transformOrigin:
-                              placement === 'bottom-start'
-                                ? 'left top'
-                                : 'left bottom',
-                          }}
-                        >
-                          <Paper>
-                            <ClickAwayListener onClickAway={handleCloseMenu}>
-                              <MenuList
-                                autoFocusItem={openMenu}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                                onKeyDown={handleListKeyDown}
-                              >
-                                <MenuItem onClick={handleDeletePost}>
-                                  ツイートを削除する
-                                </MenuItem>
-                              </MenuList>
-                            </ClickAwayListener>
-                          </Paper>
-                        </Grow>
-                      )}
-                    </Popper>
-                  </div>
+                  <DropDownMenu
+                    open={openMenu}
+                    handleToggle={handleToggle}
+                    handleClose={handleCloseMenu}
+                    handleListKeyDown={handleListKeyDown}
+                    anchorRef={anchorRef}
+                  >
+                    <MenuItem onClick={handleDeletePost}>
+                      ツイートを削除する
+                    </MenuItem>
+                  </DropDownMenu>
                 )}
               </PostHeaderText>
             </div>
