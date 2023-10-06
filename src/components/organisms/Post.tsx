@@ -6,7 +6,6 @@ import {
   VerifiedUser,
 } from '@mui/icons-material'
 import {
-  Alert,
   Avatar,
   Button,
   ClickAwayListener,
@@ -15,12 +14,12 @@ import {
   MenuList,
   Paper,
   Popper,
-  Snackbar,
 } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { deletePost } from '../../lib/api/tweet'
+import { FlashMessage } from './FlashMessage'
 
 type Post = {
   id: number
@@ -48,8 +47,6 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
-
-  const isDeleteable = true
 
   const handleToggle = () => {
     setOpenMenu((prevOpen) => !prevOpen)
@@ -122,36 +119,20 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
 
   return (
     <StyledPost>
-      {myself && (
-        <>
-          <Snackbar
-            open={openSuccessMessage}
-            autoHideDuration={6000}
-            onClose={handleCloseSuccessMessage}
-          >
-            <Alert
-              onClose={handleCloseSuccessMessage}
-              severity="success"
-              sx={{ width: '100%' }}
-            >
-              ツイートを削除しました
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={openErrorMessage}
-            autoHideDuration={6000}
-            onClose={handleCloseErrorMessage}
-          >
-            <Alert
-              onClose={handleCloseErrorMessage}
-              severity="error"
-              sx={{ width: '100%' }}
-            >
-              ツイートの削除に失敗しました
-            </Alert>
-          </Snackbar>
-        </>
-      )}
+      <FlashMessage
+        open={openSuccessMessage}
+        handleCloseMessage={handleCloseSuccessMessage}
+        severity="success"
+      >
+        削除しました
+      </FlashMessage>
+      <FlashMessage
+        open={openErrorMessage}
+        handleCloseMessage={handleCloseErrorMessage}
+        severity="error"
+      >
+        削除に失敗しました
+      </FlashMessage>
       <div className="post">
         <div className="postAvatar">
           <Avatar />
@@ -167,7 +148,7 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
                     {post.user.name}
                   </span>
                 </h3>
-                {isDeleteable && (
+                {myself && (
                   <div>
                     <Button
                       ref={anchorRef}
