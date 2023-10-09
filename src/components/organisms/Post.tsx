@@ -4,10 +4,13 @@ import {
   Repeat,
   VerifiedUser,
 } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
-import React from 'react'
+import { Avatar, MenuItem } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { deletePost } from '../../lib/api/tweet'
+import { FlashMessage } from './FlashMessage'
+import { DropDownMenu } from './DropDownMenu'
 
 type Post = {
   id: number
@@ -25,107 +28,166 @@ type Post = {
 
 type Props = {
   post: Post
+  myself: boolean
+  handleGetProfile?: (userId: number) => void
 }
 
 const homeUrl = process.env.PUBLIC_URL
 
-export const Post: React.FC<Props> = (props) => {
-  const { post } = props
+export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
+  const [openMenu, setOpenMenu] = useState(false)
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
+  const [openErrorMessage, setOpenErrorMessage] = useState(false)
+  const anchorRef = useRef<HTMLButtonElement>(null)
+
+  const handleDeletePost = () => {
+    deletePost(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ツイート削除に失敗しました')
+
+        setOpenSuccessMessage(true)
+        if (handleGetProfile) handleGetProfile(Number(post.user.id))
+      })
+      .catch((err) => {
+        console.error(err)
+        setOpenErrorMessage(true)
+      })
+    setOpenMenu(false)
+  }
+
+  const prevOpen = useRef(openMenu)
+  useEffect(() => {
+    if (prevOpen.current === true && openMenu === false) {
+      anchorRef.current!.focus()
+    }
+
+    prevOpen.current = openMenu
+  }, [openMenu])
 
   return (
     <StyledPost>
-      <div className="post">
-        <div className="postAvatar">
+      <FlashMessage
+        open={openSuccessMessage}
+        setOpen={setOpenSuccessMessage}
+        severity="success"
+      >
+        削除しました
+      </FlashMessage>
+      <FlashMessage
+        open={openErrorMessage}
+        setOpen={setOpenErrorMessage}
+        severity="error"
+      >
+        削除に失敗しました
+      </FlashMessage>
+      <PostCard>
+        <PostCardAvatar>
           <Avatar />
-        </div>
-        <div className="postBody">
-          <Link to={`${homeUrl}/tweets/${post.id}`} className="postLink">
-            <div className="postHeader">
-              <div className="postHeaderText">
-                <h3>
-                  {post.user.nickname}
-                  <span className="postHeaderSpecial">
-                    <VerifiedUser className="postBadge" />
-                    {post.user.name}
-                  </span>
-                </h3>
-              </div>
-              <div className="postHeaderDescription">
-                <p>{post.tweet}</p>
-              </div>
-            </div>
-          </Link>
-          {post.imageUrl && <img src={post.imageUrl} />}
-          <div className="postFooter">
+        </PostCardAvatar>
+        <PostCardBody>
+          <PostCardBodyTop>
+            <PostCardBodyTopContents>
+              <PostCardHeaderName>
+                {post.user.nickname}
+                <VerifiedUserBadge />
+                <AccountName>{post.user.name}</AccountName>
+              </PostCardHeaderName>
+              {myself && (
+                <DropDownMenu
+                  open={openMenu}
+                  setOpen={setOpenMenu}
+                  anchorRef={anchorRef}
+                >
+                  <MenuItem onClick={handleDeletePost}>
+                    ツイートを削除する
+                  </MenuItem>
+                </DropDownMenu>
+              )}
+            </PostCardBodyTopContents>
+            <PostLink to={`${homeUrl}/tweets/${post.id}`}>
+              <PostCardBodyDescriptionBlock>
+                <PostCardBodyDescription>{post.tweet}</PostCardBodyDescription>
+              </PostCardBodyDescriptionBlock>
+            </PostLink>
+          </PostCardBodyTop>
+          {post.imageUrl && <PostImage src={post.imageUrl} />}
+          <PostFooter>
             <ChatBubbleOutline fontSize="small" />
             <Repeat fontSize="small" />
             <FavoriteBorder fontSize="small" />
-          </div>
-        </div>
-      </div>
+          </PostFooter>
+        </PostCardBody>
+      </PostCard>
     </StyledPost>
   )
 }
 
-const StyledPost = styled.div`
-  .post {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--twitter-background);
-  }
+const StyledPost = styled.div``
 
-  .postBody {
-    flex: 1;
-    min-width: 0;
-  }
+const PostCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--twitter-background);
+`
 
-  p {
-    margin: 0;
-    padding: 0;
-  }
+const PostCardAvatar = styled.div`
+  padding: 15px;
+`
 
-  .postBody > img {
-    border-radius: 20px;
-    width: 100%;
-  }
+const PostCardBody = styled.div`
+  flex: 1;
+  min-width: 0;
+`
 
-  .postLink {
-    text-decoration: none;
-    color: inherit;
-  }
+const PostLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`
 
-  .postFooter {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-  }
+const PostCardBodyTop = styled.div``
 
-  .postHeaderDescription {
-    margin-bottom: 10px;
-    font-size: 15px;
-    white-space: normal;
-    word-wrap: break-word;
-  }
+const PostCardBodyTopContents = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
-  .postHeaderText > h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
+const PostCardHeaderName = styled.h3`
+  font-size: 15px;
+  margin-bottom: 5px;
+`
 
-  .postBadge {
-    font-size: 14px !important;
-    color: var(--twitter-color);
-  }
+const AccountName = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  color: gray;
+`
 
-  .postHeaderSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: gray;
-  }
+const VerifiedUserBadge = styled(VerifiedUser)`
+  font-size: 14px !important;
+  color: var(--twitter-color);
+`
 
-  .postAvatar {
-    padding: 15px;
-  }
+const PostCardBodyDescriptionBlock = styled.div`
+  margin-bottom: 10px;
+  font-size: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+`
+
+const PostCardBodyDescription = styled.p`
+  margin: 0;
+  padding: 0;
+`
+
+const PostImage = styled.img`
+  border-radius: 20px;
+  width: 100%;
+`
+
+const PostFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 `

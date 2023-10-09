@@ -40,7 +40,7 @@ export const Posts: React.FC<Props> = ({
   return (
     <StyledPost>
       {posts.map((post) => (
-        <Post key={post.id} post={post} />
+        <Post key={post.id} post={post} myself={false} />
       ))}
       <div className="pagination">
         <Pagination

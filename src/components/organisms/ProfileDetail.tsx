@@ -5,7 +5,6 @@ import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
-import { useAppSelector } from '../../App'
 import { ProfileSubInfo } from './ProfileSubInfo'
 
 type User = {
@@ -41,12 +40,15 @@ type Profile = User & {
 type Props = {
   profile: Profile
   setProfile: React.Dispatch<React.SetStateAction<Profile>>
+  myself: boolean
 }
 
-export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
+export const ProfileDetail: React.FC<Props> = ({
+  profile,
+  setProfile,
+  myself,
+}) => {
   const [isModalOpen, setModalOpen] = useState(false)
-
-  const myUserId = useAppSelector((state) => state.user.userInfo?.id)
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen)
@@ -92,7 +94,7 @@ export const ProfileDetail: React.FC<Props> = ({ profile, setProfile }) => {
                 <img src={`${process.env.PUBLIC_URL}/no_image.png`} />
               )}
             </div>
-            {myUserId === profile.id && (
+            {myself && (
               <Button
                 className="profileBodyTopEditButton"
                 onClick={toggleModal}
