@@ -20,9 +20,14 @@ type Post = {
 type Props = {
   posts: Post[]
   myself: boolean
+  handleGetProfile: (userId: number) => void
 }
 
-export const VariousPosts: React.FC<Props> = ({ posts, myself }) => {
+export const VariousPosts: React.FC<Props> = ({
+  posts,
+  myself,
+  handleGetProfile,
+}) => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
 
   const handleTabChange = (_event: React.SyntheticEvent, tabIndex: number) => {
@@ -42,7 +47,14 @@ export const VariousPosts: React.FC<Props> = ({ posts, myself }) => {
         <Tab label="いいね" />
       </Tabs>
       {currentTabIndex === 0 &&
-        posts.map((post) => <Post key={post.id} post={post} myself={myself} />)}
+        posts.map((post) => (
+          <Post
+            key={post.id}
+            post={post}
+            myself={myself}
+            handleGetProfile={handleGetProfile}
+          />
+        ))}
     </StyledVariousPosts>
   )
 }

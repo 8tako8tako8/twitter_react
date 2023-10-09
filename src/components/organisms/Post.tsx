@@ -29,11 +29,12 @@ type Post = {
 type Props = {
   post: Post
   myself: boolean
+  handleGetProfile?: (userId: number) => void
 }
 
 const homeUrl = process.env.PUBLIC_URL
 
-export const Post: React.FC<Props> = ({ post, myself }) => {
+export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
   const [openMenu, setOpenMenu] = useState(false)
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
@@ -45,6 +46,7 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
         if (res.status != 200) throw new Error('ツイート削除に失敗しました')
 
         setOpenSuccessMessage(true)
+        if (handleGetProfile) handleGetProfile(Number(post.user.id))
       })
       .catch((err) => {
         console.error(err)

@@ -136,7 +136,11 @@ export const Profile: React.FC = () => {
           setProfile={setProfile}
           myself={myself}
         />
-        <VariousPosts posts={posts} myself={myself} />
+        <VariousPosts
+          posts={posts}
+          myself={myself}
+          handleGetProfile={handleGetProfile}
+        />
       </div>
     </StyledHome>
   )
