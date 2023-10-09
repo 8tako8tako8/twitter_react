@@ -78,116 +78,114 @@ export const Post: React.FC<Props> = ({ post, myself }) => {
       >
         削除に失敗しました
       </FlashMessage>
-      <div className="post">
-        <div className="postAvatar">
+      <PostCard>
+        <PostCardAvatar>
           <Avatar />
-        </div>
-        <div className="postBody">
-          <div className="postHeader">
-            <div className="postHeaderText">
-              <PostHeaderText>
-                <h3>
-                  {post.user.nickname}
-                  <span className="postHeaderSpecial">
-                    <VerifiedUser className="postBadge" />
-                    {post.user.name}
-                  </span>
-                </h3>
-                {myself && (
-                  <DropDownMenu
-                    open={openMenu}
-                    setOpen={setOpenMenu}
-                    anchorRef={anchorRef}
-                  >
-                    <MenuItem onClick={handleDeletePost}>
-                      ツイートを削除する
-                    </MenuItem>
-                  </DropDownMenu>
-                )}
-              </PostHeaderText>
-            </div>
-            <Link to={`${homeUrl}/tweets/${post.id}`} className="postLink">
-              <div className="postHeaderDescription">
-                <p>{post.tweet}</p>
-              </div>
-            </Link>
-          </div>
-          {post.imageUrl && <img src={post.imageUrl} />}
-          <div className="postFooter">
+        </PostCardAvatar>
+        <PostCardBody>
+          <PostCardBodyTop>
+            <PostCardBodyTopContents>
+              <PostCardHeaderName>
+                {post.user.nickname}
+                <VerifiedUserBadge />
+                <AccountName>{post.user.name}</AccountName>
+              </PostCardHeaderName>
+              {myself && (
+                <DropDownMenu
+                  open={openMenu}
+                  setOpen={setOpenMenu}
+                  anchorRef={anchorRef}
+                >
+                  <MenuItem onClick={handleDeletePost}>
+                    ツイートを削除する
+                  </MenuItem>
+                </DropDownMenu>
+              )}
+            </PostCardBodyTopContents>
+            <PostLink to={`${homeUrl}/tweets/${post.id}`}>
+              <PostCardBodyDescriptionBlock>
+                <PostCardBodyDescription>{post.tweet}</PostCardBodyDescription>
+              </PostCardBodyDescriptionBlock>
+            </PostLink>
+          </PostCardBodyTop>
+          {post.imageUrl && <PostImage src={post.imageUrl} />}
+          <PostFooter>
             <ChatBubbleOutline fontSize="small" />
             <Repeat fontSize="small" />
             <FavoriteBorder fontSize="small" />
-          </div>
-        </div>
-      </div>
+          </PostFooter>
+        </PostCardBody>
+      </PostCard>
     </StyledPost>
   )
 }
 
-const StyledPost = styled.div`
-  .post {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--twitter-background);
-  }
+const StyledPost = styled.div``
 
-  .postBody {
-    flex: 1;
-    min-width: 0;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .postBody > img {
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  .postLink {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .postFooter {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-  }
-
-  .postHeaderDescription {
-    margin-bottom: 10px;
-    font-size: 15px;
-    white-space: normal;
-    word-wrap: break-word;
-  }
-
-  .postBadge {
-    font-size: 14px !important;
-    color: var(--twitter-color);
-  }
-
-  .postHeaderSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: gray;
-  }
-
-  .postAvatar {
-    padding: 15px;
-  }
+const PostCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--twitter-background);
 `
 
-const PostHeaderText = styled.div`
+const PostCardAvatar = styled.div`
+  padding: 15px;
+`
+
+const PostCardBody = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const PostLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`
+
+const PostCardBodyTop = styled.div``
+
+const PostCardBodyTopContents = styled.div`
   display: flex;
   justify-content: space-between;
+`
 
-  h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
+const PostCardHeaderName = styled.h3`
+  font-size: 15px;
+  margin-bottom: 5px;
+`
+
+const AccountName = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  color: gray;
+`
+
+const VerifiedUserBadge = styled(VerifiedUser)`
+  font-size: 14px !important;
+  color: var(--twitter-color);
+`
+
+const PostCardBodyDescriptionBlock = styled.div`
+  margin-bottom: 10px;
+  font-size: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+`
+
+const PostCardBodyDescription = styled.p`
+  margin: 0;
+  padding: 0;
+`
+
+const PostImage = styled.img`
+  border-radius: 20px;
+  width: 100%;
+`
+
+const PostFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
 `
