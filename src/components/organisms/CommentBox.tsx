@@ -1,14 +1,26 @@
 import { Avatar, Button } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
+import { postComment } from '../../lib/api/comment'
+import { useParams } from 'react-router-dom'
 
 export const CommentBox: React.FC = () => {
-  const [commentMessage, setCommentMessage] = React.useState('')
+  const [commentMessage, setCommentMessage] = useState('')
+
+  const { tweetId } = useParams()
 
   const handleSendComment = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // TODO: コメント投稿処理
+    postComment(commentMessage, Number(tweetId))
+      .then((res) => {
+        if (res.status != 201) throw new Error('コメント投稿に失敗しました')
+
+        setCommentMessage('')
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   return (
@@ -19,12 +31,12 @@ export const CommentBox: React.FC = () => {
             <Avatar />
             <textarea
               value={commentMessage}
-              placeholder="返信をツイート"
+              placeholder="コメントを投稿"
               onChange={(e) => setCommentMessage(e.target.value)}
             />
           </div>
           <Button className="commentBoxButton" type="submit">
-            返信
+            コメント
           </Button>
         </form>
       </div>
