@@ -45,62 +45,62 @@ export const CommentBox: React.FC = () => {
       >
         コメント投稿しました
       </FlashMessage>
-      <div className="commentBox">
-        <form onSubmit={handleSendComment}>
-          <div className="commentBoxInput">
+      <CommentCard>
+        <CommentForm onSubmit={handleSendComment}>
+          <CommentInputBlock>
             <Avatar />
-            <textarea
+            <CommentTextArea
               value={commentMessage}
               placeholder="コメントを投稿"
               onChange={(e) => setCommentMessage(e.target.value)}
             />
-          </div>
-          <Button className="commentBoxButton" type="submit">
+          </CommentInputBlock>
+          <CommentButton className="commentBoxButton" type="submit">
             コメント
-          </Button>
-        </form>
-        {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      </div>
+          </CommentButton>
+        </CommentForm>
+      </CommentCard>
+      {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </StyledCommentBox>
   )
 }
 
-const StyledCommentBox = styled.div`
-  .commentBox {
-    padding-bottom: 10px;
-    padding-right: 10px;
-    border-bottom: 1px solid var(--twitter-background);
-  }
+const StyledCommentBox = styled.div``
 
-  .commentBox > form {
-    display: flex;
-    justify-content: space-between;
-  }
+const CommentCard = styled.div`
+  padding-bottom: 10px;
+  padding-right: 10px;
+  border-bottom: 1px solid var(--twitter-background);
+`
 
-  .commentBoxInput {
-    padding: 20px;
-    display: flex;
-    width: 80%;
-  }
+const CommentForm = styled.form`
+  display: flex;
+  justify-content: space-between;
+`
 
-  .commentBoxInput > textarea {
-    flex: 1;
-    font-size: 20px;
-    margin-left: 20px;
-    border: none;
-    resize: none;
-    overflow: auto;
-    min-width: 0;
-  }
+const CommentInputBlock = styled.div`
+  padding: 20px;
+  display: flex;
+  width: 80%;
+`
 
-  .commentBoxButton {
-    background-color: var(--twitter-color) !important;
-    color: white !important;
-    font-weight: 900 !important;
-    width: 80px !important;
-    height: 40px !important;
-    border-radius: 30px !important;
-    margin-left: auto !important;
-    margin-top: 20px !important;
-  }
+const CommentTextArea = styled.textarea`
+  flex: 1;
+  font-size: 20px;
+  margin-left: 20px;
+  border: none;
+  resize: none;
+  overflow: auto;
+  min-width: 0;
+`
+
+const CommentButton = styled(Button)`
+  background-color: var(--twitter-color) !important;
+  color: white !important;
+  font-weight: 900 !important;
+  width: 80px !important;
+  height: 40px !important;
+  border-radius: 30px !important;
+  margin-left: auto !important;
+  margin-top: 20px !important;
 `
