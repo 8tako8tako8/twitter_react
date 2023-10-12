@@ -2,29 +2,49 @@ import { Avatar, Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { postComment } from '../../lib/api/comment'
+import { validateCommentMessage } from '../../validators/commentValidator'
+import { ErrorMessage } from './ErrorMessage'
 import { useParams } from 'react-router-dom'
+import { FlashMessage } from './FlashMessage'
 
 export const CommentBox: React.FC = () => {
   const [commentMessage, setCommentMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
 
   const { tweetId } = useParams()
 
   const handleSendComment = (e: React.FormEvent) => {
     e.preventDefault()
 
+    const validationError = validateCommentMessage(commentMessage)
+    if (validationError) {
+      setErrorMessage(validationError)
+      return
+    }
+
     postComment(commentMessage, Number(tweetId))
       .then((res) => {
         if (res.status != 201) throw new Error('コメント投稿に失敗しました')
 
+        setOpenSuccessMessage(true)
         setCommentMessage('')
       })
       .catch((err) => {
+        setErrorMessage((err.message || err) as string)
         console.error(err)
       })
   }
 
   return (
     <StyledCommentBox>
+      <FlashMessage
+        open={openSuccessMessage}
+        setOpen={setOpenSuccessMessage}
+        severity="success"
+      >
+        コメント投稿しました
+      </FlashMessage>
       <div className="commentBox">
         <form onSubmit={handleSendComment}>
           <div className="commentBoxInput">
@@ -39,6 +59,7 @@ export const CommentBox: React.FC = () => {
             コメント
           </Button>
         </form>
+        {errorMessage !== '' && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </div>
     </StyledCommentBox>
   )
