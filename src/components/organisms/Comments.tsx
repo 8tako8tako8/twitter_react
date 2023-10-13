@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { Comment } from './Comment'
 import { Pagination } from '@mui/material'
+import { getComments } from '../../lib/api/comment'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Loading } from '../pages/Loading'
 
 type Comment = {
   id: number
@@ -12,39 +15,66 @@ type Comment = {
     avatarImageUrl: string
   }
   comment: string
-  imageUrl: string
 }
 
-const initialComments: Comment[] = [
-  {
-    id: 1,
-    user: {
-      id: '1',
-      name: '山田太郎',
-      nickname: 'taro',
-      avatarImageUrl: 'https://source.unsplash.com/random',
-    },
-    comment: 'コメント1',
-    imageUrl: 'https://source.unsplash.com/random',
-  },
-  {
-    id: 2,
-    user: {
-      id: '2',
-      name: '山田二郎',
-      nickname: 'jiro',
-      avatarImageUrl: 'https://source.unsplash.com/random',
-    },
-    comment: 'コメント2',
-    imageUrl: 'https://source.unsplash.com/random',
-  },
-]
-
 export const Comments: React.FC = () => {
-  const [comments] = React.useState<Comment[]>(initialComments)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
-  const totalPages = 1
-  const currentPage = 1
+  const { tweetId } = useParams()
+  const navigate = useNavigate()
+
+  const handleChangePage = (
+    _event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page)
+    navigate({ ...location, search: `?page=${page}` })
+    handleGetComments(Number(tweetId), page)
+  }
+
+  const handleGetComments = (tweetId: number, page: number) => {
+    setLoading(true)
+
+    getComments(tweetId, page)
+      .then((res) => {
+        if (res && res.data) {
+          setTotalPages((res.data.pagination.totalPages as number) || 1)
+          const resComments: Comment[] = (res.data.comments as Comment[]).map(
+            (comment) => {
+              return {
+                id: comment.id,
+                user: comment.user,
+                comment: comment.comment,
+              }
+            }
+          )
+          console.log(resComments)
+          setComments(resComments)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    //  クエリパラメータからpageを取得する
+    const queryParams = new URLSearchParams(location.search)
+    const page = Number(queryParams.get('page')) || 1
+
+    setCurrentPage(page)
+    handleGetComments(Number(tweetId), page)
+  }, [location.search])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <StyledComments>
@@ -58,6 +88,7 @@ export const Comments: React.FC = () => {
           variant="outlined"
           color="primary"
           size="small"
+          onChange={handleChangePage}
         />
       </div>
     </StyledComments>
