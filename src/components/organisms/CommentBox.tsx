@@ -1,4 +1,4 @@
-import { Avatar, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { postComment } from '../../lib/api/comment'
@@ -6,6 +6,7 @@ import { validateCommentMessage } from '../../validators/commentValidator'
 import { ErrorMessage } from './ErrorMessage'
 import { useParams } from 'react-router-dom'
 import { FlashMessage } from './FlashMessage'
+import { useAppSelector } from '../../App'
 
 export const CommentBox: React.FC = () => {
   const [commentMessage, setCommentMessage] = useState('')
@@ -13,6 +14,8 @@ export const CommentBox: React.FC = () => {
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
 
   const { tweetId } = useParams()
+
+  const myUser = useAppSelector((state) => state.user.userInfo)
 
   const handleSendComment = (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,7 +52,11 @@ export const CommentBox: React.FC = () => {
       <CommentCard>
         <CommentForm onSubmit={handleSendComment}>
           <CommentInputBlock>
-            <Avatar />
+            {myUser && myUser.avatarImageUrl ? (
+              <AvatarImage src={myUser.avatarImageUrl} />
+            ) : (
+              <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
+            )}
             <CommentTextArea
               value={commentMessage}
               placeholder="コメントを投稿"
@@ -83,6 +90,12 @@ const CommentInputBlock = styled.div`
   padding: 20px;
   display: flex;
   width: 80%;
+`
+
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 `
 
 const CommentTextArea = styled.textarea`
