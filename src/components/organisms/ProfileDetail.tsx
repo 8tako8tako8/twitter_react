@@ -15,8 +15,8 @@ type User = {
   location: string
   websiteUrl: string
   introduction: string
-  avatarUrl: string
-  headerUrl: string
+  avatarImageUrl: string
+  headerImageUrl: string
 }
 
 type Post = {
@@ -25,7 +25,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   tweet: string
   imageUrl: string
@@ -79,8 +79,8 @@ export const ProfileDetail: React.FC<Props> = ({
     <StyledProfileDetail>
       <div className="profileDetail">
         <div className="profileHeader">
-          {profile.headerUrl ? (
-            <img src={profile.headerUrl} />
+          {profile.headerImageUrl ? (
+            <img src={profile.headerImageUrl} />
           ) : (
             <img src={`${process.env.PUBLIC_URL}/dark.png`} />
           )}
@@ -88,8 +88,8 @@ export const ProfileDetail: React.FC<Props> = ({
         <div className="profileBody">
           <div className="profileBodyTop">
             <div className="profileAvatar">
-              {profile.avatarUrl ? (
-                <img src={profile.avatarUrl} />
+              {profile.avatarImageUrl ? (
+                <img src={profile.avatarImageUrl} />
               ) : (
                 <img src={`${process.env.PUBLIC_URL}/no_image.png`} />
               )}

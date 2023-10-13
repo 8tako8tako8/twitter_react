@@ -6,8 +6,8 @@ type User = {
   location: string
   websiteUrl: string
   introduction: string
-  avatarUrl: string
-  headerUrl: string
+  avatarImageUrl: string
+  headerImageUrl: string
 }
 
 export type ProfileErrors = Partial<User>
