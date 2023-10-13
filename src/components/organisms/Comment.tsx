@@ -20,7 +20,7 @@ type Props = {
 export const Comment: React.FC<Props> = ({ comment }) => {
   return (
     <StyledComment>
-      <div className="comment">
+      <CommentCard>
         <AvatarImageBlock>
           {comment.user.avatarImageUrl ? (
             <AvatarImage src={comment.user.avatarImageUrl} />
@@ -28,79 +28,74 @@ export const Comment: React.FC<Props> = ({ comment }) => {
             <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
           )}
         </AvatarImageBlock>
-        <div className="commentBody">
-          <div className="commentHeader">
-            <div className="commentHeaderText">
-              <h3>
-                {comment.user.nickname}
-                <span className="commentHeaderSpecial">
-                  <VerifiedUser className="commentBadge" />
-                  {comment.user.name}
-                </span>
-              </h3>
-            </div>
-            <div className="commentHeaderDescription">
-              <p>{comment.comment}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <CommentCardBody>
+          <CommentCardBodyTopContents>
+            <CommentCardHeaderName>
+              {comment.user.nickname}
+              <VerifiedUserBadge />
+              <AccountName>{comment.user.name}</AccountName>
+            </CommentCardHeaderName>
+          </CommentCardBodyTopContents>
+          <CommentCardBodyDescriptionBlock>
+            <CommentCardBodyDescription>
+              {comment.comment}
+            </CommentCardBodyDescription>
+          </CommentCardBodyDescriptionBlock>
+        </CommentCardBody>
+      </CommentCard>
     </StyledComment>
   )
 }
 
-const StyledComment = styled.div`
-  .comment {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--twitter-background);
-  }
+const StyledComment = styled.div``
 
-  .commentBody {
-    flex: 1;
-    min-width: 0;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .commentBody > img {
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  .commentHeaderDescription {
-    margin-bottom: 10px;
-    font-size: 15px;
-    white-space: normal;
-    word-wrap: break-word;
-  }
-
-  .commentHeaderText > h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
-
-  .commentBadge {
-    font-size: 14px !important;
-    color: var(--twitter-color);
-  }
-
-  .commentHeaderSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: gray;
-  }
-`
-
-const AvatarImageBlock = styled.div`
-  padding: 15px;
+const CommentCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--twitter-background);
 `
 
 const AvatarImage = styled.img`
   border-radius: 50%;
   width: 50px;
   height: 50px;
+`
+
+const AvatarImageBlock = styled.div`
+  padding: 15px;
+`
+
+const CommentCardBody = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const CommentCardBodyTopContents = styled.div``
+
+const CommentCardHeaderName = styled.h3`
+  font-size: 15px;
+  margin-bottom: 5px;
+`
+
+const VerifiedUserBadge = styled(VerifiedUser)`
+  font-size: 14px !important;
+  color: var(--twitter-color);
+`
+
+const AccountName = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  color: gray;
+`
+
+const CommentCardBodyDescriptionBlock = styled.div`
+  margin-bottom: 10px;
+  font-size: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+`
+
+const CommentCardBodyDescription = styled.p`
+  margin: 0;
+  padding: 0;
 `
