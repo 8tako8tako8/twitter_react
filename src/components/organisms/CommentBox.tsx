@@ -29,6 +29,7 @@ export const CommentBox: React.FC = () => {
 
         setOpenSuccessMessage(true)
         setCommentMessage('')
+        setErrorMessage('')
       })
       .catch((err) => {
         setErrorMessage((err.message || err) as string)
