@@ -45,8 +45,10 @@ export const Login: React.FC = () => {
           })
           Cookies.set('_uid', res.headers['uid'] as string, { secure: true })
 
-          const { email, name, nickname, image, id } = res.data.data
-          dispatch(setCurrentUser({ email, name, nickname, image, id }))
+          const { email, name, nickname, avatarImageUrl, id } = res.data.data
+          dispatch(
+            setCurrentUser({ email, name, nickname, avatarImageUrl, id })
+          )
           setErrorMessage('')
 
           // ホーム画面に遷移させる
