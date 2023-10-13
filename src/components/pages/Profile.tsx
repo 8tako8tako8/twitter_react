@@ -46,6 +46,18 @@ type Post = {
   likes: number
 }
 
+type Comment = {
+  id: number
+  user: {
+    id: string
+    name: string
+    nickname: string
+    avatarImageUrl: string
+  }
+  tweetId: number
+  comment: string
+}
+
 // TODO: リツイート、いいね機能、アバター画像追加後に削除する
 const initialPost: Post = {
   id: 1,
@@ -68,6 +80,7 @@ type Profile = User & {
 export const Profile: React.FC = () => {
   const [profile, setProfile] = useState(initialUser as Profile)
   const [posts, setPosts] = useState<Post[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
 
   const { userId } = useParams()
   const myUserId = useAppSelector((state) => state.user.userInfo?.id)
@@ -114,6 +127,18 @@ export const Profile: React.FC = () => {
             }
           })
           setPosts(resPosts)
+
+          const resComments: Comment[] = (res.data.comments as Comment[]).map(
+            (comment) => {
+              return {
+                id: comment.id,
+                user: comment.user,
+                tweetId: comment.tweetId,
+                comment: comment.comment,
+              }
+            }
+          )
+          setComments(resComments)
         }
       })
       .catch((err) => {
@@ -138,6 +163,7 @@ export const Profile: React.FC = () => {
         />
         <VariousPosts
           posts={posts}
+          comments={comments}
           myself={myself}
           handleGetProfile={handleGetProfile}
         />

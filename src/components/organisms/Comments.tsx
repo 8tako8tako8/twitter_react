@@ -9,7 +9,7 @@ type Comment = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   comment: string
   imageUrl: string
@@ -22,7 +22,7 @@ const initialComments: Comment[] = [
       id: '1',
       name: '山田太郎',
       nickname: 'taro',
-      avatarUrl: '/path/to/avatar1.png',
+      avatarImageUrl: '/path/to/avatar1.png',
     },
     comment: 'コメント1',
     imageUrl: 'https://source.unsplash.com/random',
@@ -33,7 +33,7 @@ const initialComments: Comment[] = [
       id: '2',
       name: '山田二郎',
       nickname: 'jiro',
-      avatarUrl: '/path/to/avatar1.png',
+      avatarImageUrl: '/path/to/avatar1.png',
     },
     comment: 'コメント2',
     imageUrl: 'https://source.unsplash.com/random',

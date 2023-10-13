@@ -1,5 +1,4 @@
 import { VerifiedUser } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
 import React from 'react'
 import { styled } from 'styled-components'
 
@@ -9,10 +8,9 @@ type Comment = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   comment: string
-  imageUrl: string
 }
 
 type Props = {
@@ -23,9 +21,13 @@ export const Comment: React.FC<Props> = ({ comment }) => {
   return (
     <StyledComment>
       <div className="comment">
-        <div className="commentAvatar">
-          <Avatar />
-        </div>
+        <AvatarImageBlock>
+          {comment.user.avatarImageUrl ? (
+            <AvatarImage src={comment.user.avatarImageUrl} />
+          ) : (
+            <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
+          )}
+        </AvatarImageBlock>
         <div className="commentBody">
           <div className="commentHeader">
             <div className="commentHeaderText">
@@ -41,7 +43,6 @@ export const Comment: React.FC<Props> = ({ comment }) => {
               <p>{comment.comment}</p>
             </div>
           </div>
-          {comment.imageUrl && <img src={comment.imageUrl} />}
         </div>
       </div>
     </StyledComment>
@@ -92,8 +93,14 @@ const StyledComment = styled.div`
     font-size: 12px;
     color: gray;
   }
+`
 
-  .commentAvatar {
-    padding: 15px;
-  }
+const AvatarImageBlock = styled.div`
+  padding: 15px;
+`
+
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 `
