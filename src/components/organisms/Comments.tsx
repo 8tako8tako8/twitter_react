@@ -81,7 +81,7 @@ export const Comments: React.FC = () => {
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
-      <div className="pagination">
+      <PaginationBlock className="pagination">
         <Pagination
           count={totalPages}
           page={currentPage}
@@ -90,17 +90,17 @@ export const Comments: React.FC = () => {
           size="small"
           onChange={handleChangePage}
         />
-      </div>
+      </PaginationBlock>
     </StyledComments>
   )
 }
 
-const StyledComments = styled.div`
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+const StyledComments = styled.div``
+
+const PaginationBlock = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `
