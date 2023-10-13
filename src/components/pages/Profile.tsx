@@ -15,8 +15,8 @@ type User = {
   location: string
   websiteUrl: string
   introduction: string
-  avatarUrl: string
-  headerUrl: string
+  avatarImageUrl: string
+  headerImageUrl: string
 }
 
 // TODO: リツイート、いいね機能、アバター画像後に削除する
@@ -28,8 +28,8 @@ const initialUser: User = {
   location: 'Tokyo',
   websiteUrl: 'https://example.com',
   introduction: 'よろしくお願いします！',
-  avatarUrl: 'https://source.unsplash.com/random',
-  headerUrl: 'https://source.unsplash.com/random',
+  avatarImageUrl: 'https://source.unsplash.com/random',
+  headerImageUrl: 'https://source.unsplash.com/random',
 }
 
 type Post = {
@@ -38,7 +38,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   tweet: string
   imageUrl: string
@@ -53,7 +53,7 @@ const initialPost: Post = {
     id: 'u1',
     name: 'aliiiiii1',
     nickname: 'Alice',
-    avatarUrl: '/path/to/avatar1.png',
+    avatarImageUrl: '/path/to/avatar1.png',
   },
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',
@@ -97,8 +97,8 @@ export const Profile: React.FC = () => {
             location: location,
             websiteUrl: websiteUrl,
             introduction: introduction,
-            avatarUrl: avatarImageUrl,
-            headerUrl: headerImageUrl,
+            avatarImageUrl: avatarImageUrl,
+            headerImageUrl: headerImageUrl,
           }
           setProfile(resProfile)
 

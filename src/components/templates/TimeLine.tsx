@@ -11,7 +11,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   tweet: string
   imageUrl: string
@@ -26,7 +26,7 @@ const initialPost: Post = {
     id: 'u1',
     name: 'aliiiiii1',
     nickname: 'Alice',
-    avatarUrl: '/path/to/avatar1.png',
+    avatarImageUrl: '/path/to/avatar1.png',
   },
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',

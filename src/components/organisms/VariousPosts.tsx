@@ -9,7 +9,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   tweet: string
   imageUrl: string

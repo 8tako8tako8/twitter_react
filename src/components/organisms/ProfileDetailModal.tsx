@@ -20,8 +20,8 @@ type User = {
   location: string
   websiteUrl: string
   introduction: string
-  avatarUrl: string
-  headerUrl: string
+  avatarImageUrl: string
+  headerImageUrl: string
 }
 
 type Post = {
@@ -30,7 +30,7 @@ type Post = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   tweet: string
   imageUrl: string
@@ -145,13 +145,15 @@ export const ProfileDetailModal: React.FC<Props> = ({
       .then(([profileResponse, avatarImageResponse, headerImageResponse]) => {
         const resProfile: Profile = profileResponse.data
         const resAvatarUrl =
-          avatarImageResponse?.data.avatarImageUrl || editingProfile.avatarUrl
+          avatarImageResponse?.data.avatarImageUrl ||
+          editingProfile.avatarImageUrl
         const resHeaderUrl =
-          headerImageResponse?.data.headerImageUrl || editingProfile.headerUrl
+          headerImageResponse?.data.headerImageUrl ||
+          editingProfile.headerImageUrl
         setProfile({
           ...resProfile,
-          avatarUrl: resAvatarUrl,
-          headerUrl: resHeaderUrl,
+          avatarImageUrl: resAvatarUrl,
+          headerImageUrl: resHeaderUrl,
         })
       })
       .catch((err) => {
