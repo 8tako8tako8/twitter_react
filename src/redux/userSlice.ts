@@ -3,9 +3,9 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 type UserInfo = {
   id: number
   email: string
-  name?: string
-  nickname?: string
-  image?: string
+  name: string
+  nickname: string
+  avatarImageUrl: string
 }
 
 type User = {
