@@ -1,5 +1,4 @@
 import { VerifiedUser } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
 import React from 'react'
 import { styled } from 'styled-components'
 
@@ -9,10 +8,9 @@ type Comment = {
     id: string
     name: string
     nickname: string
-    avatarUrl: string
+    avatarImageUrl: string
   }
   comment: string
-  imageUrl: string
 }
 
 type Props = {
@@ -22,78 +20,82 @@ type Props = {
 export const Comment: React.FC<Props> = ({ comment }) => {
   return (
     <StyledComment>
-      <div className="comment">
-        <div className="commentAvatar">
-          <Avatar />
-        </div>
-        <div className="commentBody">
-          <div className="commentHeader">
-            <div className="commentHeaderText">
-              <h3>
-                {comment.user.nickname}
-                <span className="commentHeaderSpecial">
-                  <VerifiedUser className="commentBadge" />
-                  {comment.user.name}
-                </span>
-              </h3>
-            </div>
-            <div className="commentHeaderDescription">
-              <p>{comment.comment}</p>
-            </div>
-          </div>
-          {comment.imageUrl && <img src={comment.imageUrl} />}
-        </div>
-      </div>
+      <CommentCard>
+        <AvatarImageBlock>
+          {comment.user.avatarImageUrl ? (
+            <AvatarImage src={comment.user.avatarImageUrl} />
+          ) : (
+            <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
+          )}
+        </AvatarImageBlock>
+        <CommentCardBody>
+          <CommentCardBodyTopContents>
+            <CommentCardHeaderName>
+              {comment.user.nickname}
+              <VerifiedUserBadge />
+              <AccountName>{comment.user.name}</AccountName>
+            </CommentCardHeaderName>
+          </CommentCardBodyTopContents>
+          <CommentCardBodyDescriptionBlock>
+            <CommentCardBodyDescription>
+              {comment.comment}
+            </CommentCardBodyDescription>
+          </CommentCardBodyDescriptionBlock>
+        </CommentCardBody>
+      </CommentCard>
     </StyledComment>
   )
 }
 
-const StyledComment = styled.div`
-  .comment {
-    display: flex;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--twitter-background);
-  }
+const StyledComment = styled.div``
 
-  .commentBody {
-    flex: 1;
-    min-width: 0;
-  }
+const CommentCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--twitter-background);
+`
 
-  p {
-    margin: 0;
-    padding: 0;
-  }
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+`
 
-  .commentBody > img {
-    border-radius: 20px;
-    width: 100%;
-  }
+const AvatarImageBlock = styled.div`
+  padding: 15px;
+`
 
-  .commentHeaderDescription {
-    margin-bottom: 10px;
-    font-size: 15px;
-    white-space: normal;
-    word-wrap: break-word;
-  }
+const CommentCardBody = styled.div`
+  flex: 1;
+  min-width: 0;
+`
 
-  .commentHeaderText > h3 {
-    font-size: 15px;
-    margin-bottom: 5px;
-  }
+const CommentCardBodyTopContents = styled.div``
 
-  .commentBadge {
-    font-size: 14px !important;
-    color: var(--twitter-color);
-  }
+const CommentCardHeaderName = styled.h3`
+  font-size: 15px;
+  margin-bottom: 5px;
+`
 
-  .commentHeaderSpecial {
-    font-weight: 600;
-    font-size: 12px;
-    color: gray;
-  }
+const VerifiedUserBadge = styled(VerifiedUser)`
+  font-size: 14px !important;
+  color: var(--twitter-color);
+`
 
-  .commentAvatar {
-    padding: 15px;
-  }
+const AccountName = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  color: gray;
+`
+
+const CommentCardBodyDescriptionBlock = styled.div`
+  margin-bottom: 10px;
+  font-size: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+`
+
+const CommentCardBodyDescription = styled.p`
+  margin: 0;
+  padding: 0;
 `
