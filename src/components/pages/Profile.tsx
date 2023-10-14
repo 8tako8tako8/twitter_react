@@ -128,16 +128,7 @@ export const Profile: React.FC = () => {
           })
           setPosts(resPosts)
 
-          const resComments: Comment[] = (res.data.comments as Comment[]).map(
-            (comment) => {
-              return {
-                id: comment.id,
-                user: comment.user,
-                tweetId: comment.tweetId,
-                comment: comment.comment,
-              }
-            }
-          )
+          const resComments: Comment[] = res.data.comments
           setComments(resComments)
         }
       })
