@@ -14,6 +14,7 @@ type Comment = {
     nickname: string
     avatarImageUrl: string
   }
+  tweetId: number
   comment: string
 }
 
