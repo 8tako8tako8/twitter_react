@@ -42,16 +42,7 @@ export const Comments: React.FC = () => {
       .then((res) => {
         if (res && res.data) {
           setTotalPages((res.data.pagination.totalPages as number) || 1)
-          const resComments: Comment[] = (res.data.comments as Comment[]).map(
-            (comment) => {
-              return {
-                id: comment.id,
-                user: comment.user,
-                comment: comment.comment,
-              }
-            }
-          )
-          console.log(resComments)
+          const resComments: Comment[] = res.data.comments as Comment[]
           setComments(resComments)
         }
       })
