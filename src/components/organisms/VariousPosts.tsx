@@ -2,6 +2,7 @@ import { Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { styled } from 'styled-components'
 import { Post } from './Post'
+import { Comment } from './Comment'
 
 type Post = {
   id: number
@@ -17,14 +18,28 @@ type Post = {
   likes: number
 }
 
+type Comment = {
+  id: number
+  user: {
+    id: string
+    name: string
+    nickname: string
+    avatarImageUrl: string
+  }
+  tweetId: number
+  comment: string
+}
+
 type Props = {
   posts: Post[]
+  comments: Comment[]
   myself: boolean
   handleGetProfile: (userId: number) => void
 }
 
 export const VariousPosts: React.FC<Props> = ({
   posts,
+  comments,
   myself,
   handleGetProfile,
 }) => {
@@ -54,6 +69,10 @@ export const VariousPosts: React.FC<Props> = ({
             myself={myself}
             handleGetProfile={handleGetProfile}
           />
+        ))}
+      {currentTabIndex === 1 &&
+        comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
         ))}
     </StyledVariousPosts>
   )

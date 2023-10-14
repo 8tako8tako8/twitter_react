@@ -4,7 +4,7 @@ import {
   Repeat,
   VerifiedUser,
 } from '@mui/icons-material'
-import { Avatar, MenuItem } from '@mui/material'
+import { MenuItem } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -81,9 +81,13 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         削除に失敗しました
       </FlashMessage>
       <PostCard>
-        <PostCardAvatar>
-          <Avatar />
-        </PostCardAvatar>
+        <AvatarImageBlock>
+          {post.user.avatarImageUrl ? (
+            <AvatarImage src={post.user.avatarImageUrl} />
+          ) : (
+            <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
+          )}
+        </AvatarImageBlock>
         <PostCardBody>
           <PostCardBodyTop>
             <PostCardBodyTopContents>
@@ -130,8 +134,14 @@ const PostCard = styled.div`
   border-bottom: 1px solid var(--twitter-background);
 `
 
-const PostCardAvatar = styled.div`
+const AvatarImageBlock = styled.div`
   padding: 15px;
+`
+
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 `
 
 const PostCardBody = styled.div`
