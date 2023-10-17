@@ -10,6 +10,7 @@ import { styled } from 'styled-components'
 import { getPost } from '../../lib/api/tweet'
 import { useParams } from 'react-router-dom'
 import { Loading } from '../pages/Loading'
+import { cancelRetweet, retweet } from '../../lib/api/retweet'
 
 type Post = {
   id: number
@@ -21,6 +22,7 @@ type Post = {
   }
   tweet: string
   imageUrl: string
+  isRetweeted: boolean
   retweets: number
   likes: number
 }
@@ -36,6 +38,7 @@ const initialPost: Post = {
   },
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',
+  isRetweeted: false,
   retweets: 5,
   likes: 20,
 }
@@ -58,6 +61,8 @@ export const PostDetailBox: React.FC = () => {
             user: res.data.user,
             tweet: res.data.tweet,
             imageUrl: res.data.imageUrl,
+            isRetweeted: res.data.isRetweeted,
+            retweets: res.data.retweets,
           }
           setPost(resPost)
         }
@@ -67,6 +72,30 @@ export const PostDetailBox: React.FC = () => {
       })
       .finally(() => {
         setLoading(false)
+      })
+  }
+
+  const handleRetweet = () => {
+    retweet(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイートに失敗しました')
+
+        setPost({ ...post, isRetweeted: true, retweets: post.retweets + 1 })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelRetweet = () => {
+    cancelRetweet(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイート解除に失敗しました')
+
+        setPost({ ...post, isRetweeted: false, retweets: post.retweets - 1 })
+      })
+      .catch((err) => {
+        console.error(err)
       })
   }
 
@@ -106,7 +135,16 @@ export const PostDetailBox: React.FC = () => {
           </div>
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
-            <Repeat fontSize="small" />
+            {post.isRetweeted && (
+              <RetweetIcon
+                fontSize="small"
+                color="primary"
+                onClick={handleCancelRetweet}
+              />
+            )}
+            {!post.isRetweeted && (
+              <RetweetIcon fontSize="small" onClick={handleRetweet} />
+            )}
             <FavoriteBorder fontSize="small" />
           </div>
         </div>
@@ -190,4 +228,8 @@ const StyledPostDetailBox = styled.div`
   .postAvatar {
     padding: 15px;
   }
+`
+
+const RetweetIcon = styled(Repeat)`
+  cursor: pointer;
 `
