@@ -14,6 +14,7 @@ type Post = {
   }
   tweet: string
   imageUrl: string
+  isRetweeted: boolean
   retweets: number
   likes: number
 }
