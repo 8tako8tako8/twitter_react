@@ -42,6 +42,7 @@ type Post = {
   }
   tweet: string
   imageUrl: string
+  isRetweeted: boolean
   retweets: number
   likes: number
 }
@@ -69,6 +70,7 @@ const initialPost: Post = {
   },
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',
+  isRetweeted: false,
   retweets: 5,
   likes: 20,
 }
@@ -122,6 +124,7 @@ export const Profile: React.FC = () => {
               user: tweet.user,
               tweet: tweet.tweet,
               imageUrl: tweet.imageUrl,
+              isRetweeted: tweet.isRetweeted,
               retweets: tweet.retweets,
               likes: tweet.likes,
             }
