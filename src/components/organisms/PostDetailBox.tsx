@@ -29,25 +29,8 @@ type Post = {
   favorites: number
 }
 
-// TODO: リツイート、いいね機能、アバター画像追加後に削除する
-const initialPost: Post = {
-  id: 1,
-  user: {
-    id: 'u1',
-    name: 'aliiiiii1',
-    nickname: 'Alice',
-    avatarUrl: '/path/to/avatar1.png',
-  },
-  tweet: 'This is a sample tweet from Alice.',
-  imageUrl: 'https://source.unsplash.com/random',
-  isRetweeted: false,
-  isFavorited: false,
-  retweets: 5,
-  favorites: 20,
-}
-
 export const PostDetailBox: React.FC = () => {
-  const [post, setPost] = useState<Post>(initialPost)
+  const [post, setPost] = useState<Post>()
   const [loading, setLoading] = useState<boolean>(false)
 
   const { tweetId } = useParams()
@@ -59,13 +42,14 @@ export const PostDetailBox: React.FC = () => {
       .then((res) => {
         if (res && res.data) {
           const resPost: Post = {
-            ...initialPost,
             id: res.data.id,
             user: res.data.user,
             tweet: res.data.tweet,
             imageUrl: res.data.imageUrl,
             isRetweeted: res.data.isRetweeted,
+            isFavorited: res.data.isFavorited,
             retweets: res.data.retweets,
+            favorites: res.data.favorites,
           }
           setPost(resPost)
         }
@@ -79,6 +63,8 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleRetweet = () => {
+    if (!post) return
+
     retweet(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイートに失敗しました')
@@ -91,6 +77,8 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleCancelRetweet = () => {
+    if (!post) return
+
     cancelRetweet(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイート解除に失敗しました')
@@ -103,6 +91,8 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleFavorite = () => {
+    if (!post) return
+
     favorite(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイートに失敗しました')
@@ -115,6 +105,8 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleCancelFavorite = () => {
+    if (!post) return
+
     cancelFavorite(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイート解除に失敗しました')
@@ -144,42 +136,42 @@ export const PostDetailBox: React.FC = () => {
           <div className="postHeader">
             <div className="postHeaderText">
               <h3>
-                {post.user.nickname}
+                {post?.user.nickname}
                 <span className="postHeaderSpecial">
                   <VerifiedUser className="postBadge" />
-                  {post.user.name}
+                  {post?.user.name}
                 </span>
               </h3>
             </div>
             <div className="postHeaderDescription">
-              <p>{post.tweet}</p>
+              <p>{post?.tweet}</p>
             </div>
           </div>
-          {post.imageUrl && <img src={post.imageUrl} />}
+          {post?.imageUrl && <img src={post?.imageUrl} />}
           <div className="postReaction">
-            <span>{post.retweets} 件のリツイート</span>
-            <span>{post.favorites} 件のいいね</span>
+            <span>{post?.retweets} 件のリツイート</span>
+            <span>{post?.favorites} 件のいいね</span>
           </div>
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
-            {post.isRetweeted && (
+            {post?.isRetweeted && (
               <RetweetIcon
                 fontSize="small"
                 color="primary"
                 onClick={handleCancelRetweet}
               />
             )}
-            {!post.isRetweeted && (
+            {!post?.isRetweeted && (
               <RetweetIcon fontSize="small" onClick={handleRetweet} />
             )}
-            {post.isFavorited && (
+            {post?.isFavorited && (
               <FavoriteIcon
                 fontSize="small"
                 color="error"
                 onClick={handleCancelFavorite}
               />
             )}
-            {!post.isFavorited && (
+            {!post?.isFavorited && (
               <FavoriteIcon fontSize="small" onClick={handleFavorite} />
             )}
             {/* <FavoriteBorder fontSize="small" /> */}

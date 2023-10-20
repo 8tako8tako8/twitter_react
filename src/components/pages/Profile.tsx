@@ -60,23 +60,6 @@ type Comment = {
   comment: string
 }
 
-// TODO: リツイート、いいね機能、アバター画像追加後に削除する
-const initialPost: Post = {
-  id: 1,
-  user: {
-    id: 'u1',
-    name: 'aliiiiii1',
-    nickname: 'Alice',
-    avatarImageUrl: '/path/to/avatar1.png',
-  },
-  tweet: 'This is a sample tweet from Alice.',
-  imageUrl: 'https://source.unsplash.com/random',
-  isRetweeted: false,
-  isFavorited: false,
-  retweets: 5,
-  favorites: 20,
-}
-
 type Profile = User & {
   posts?: Post[]
 }
@@ -119,19 +102,7 @@ export const Profile: React.FC = () => {
           }
           setProfile(resProfile)
 
-          const resPosts: Post[] = (res.data.tweets as Post[]).map((tweet) => {
-            return {
-              ...initialPost,
-              id: tweet.id,
-              user: tweet.user,
-              tweet: tweet.tweet,
-              imageUrl: tweet.imageUrl,
-              isRetweeted: tweet.isRetweeted,
-              isFavorited: tweet.isFavorited,
-              retweets: tweet.retweets,
-              favorites: tweet.favorites,
-            }
-          })
+          const resPosts: Post[] = res.data.tweets
           setPosts(resPosts)
 
           const resComments: Comment[] = res.data.comments
