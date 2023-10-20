@@ -11,6 +11,7 @@ import { getPost } from '../../lib/api/tweet'
 import { useParams } from 'react-router-dom'
 import { Loading } from '../pages/Loading'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
+import { cancelFavorite, favorite } from '../../lib/api/favorite'
 
 type Post = {
   id: number
@@ -23,8 +24,9 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
+  favorites: number
 }
 
 // TODO: リツイート、いいね機能、アバター画像追加後に削除する
@@ -39,8 +41,9 @@ const initialPost: Post = {
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',
   isRetweeted: false,
+  isFavorited: false,
   retweets: 5,
-  likes: 20,
+  favorites: 20,
 }
 
 export const PostDetailBox: React.FC = () => {
@@ -99,6 +102,30 @@ export const PostDetailBox: React.FC = () => {
       })
   }
 
+  const handleFavorite = () => {
+    favorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイートに失敗しました')
+
+        setPost({ ...post, isFavorited: true, favorites: post.favorites + 1 })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelFavorite = () => {
+    cancelFavorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイート解除に失敗しました')
+
+        setPost({ ...post, isFavorited: false, favorites: post.favorites - 1 })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   useEffect(() => {
     handleGetPost(Number(tweetId))
   }, [])
@@ -131,7 +158,7 @@ export const PostDetailBox: React.FC = () => {
           {post.imageUrl && <img src={post.imageUrl} />}
           <div className="postReaction">
             <span>{post.retweets} 件のリツイート</span>
-            <span>{post.likes} 件のいいね</span>
+            <span>{post.favorites} 件のいいね</span>
           </div>
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
@@ -145,7 +172,17 @@ export const PostDetailBox: React.FC = () => {
             {!post.isRetweeted && (
               <RetweetIcon fontSize="small" onClick={handleRetweet} />
             )}
-            <FavoriteBorder fontSize="small" />
+            {post.isFavorited && (
+              <FavoriteIcon
+                fontSize="small"
+                color="error"
+                onClick={handleCancelFavorite}
+              />
+            )}
+            {!post.isFavorited && (
+              <FavoriteIcon fontSize="small" onClick={handleFavorite} />
+            )}
+            {/* <FavoriteBorder fontSize="small" /> */}
           </div>
         </div>
       </div>
@@ -231,5 +268,9 @@ const StyledPostDetailBox = styled.div`
 `
 
 const RetweetIcon = styled(Repeat)`
+  cursor: pointer;
+`
+
+const FavoriteIcon = styled(FavoriteBorder)`
   cursor: pointer;
 `
