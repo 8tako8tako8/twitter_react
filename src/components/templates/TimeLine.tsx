@@ -16,8 +16,9 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
+  favorites: number
 }
 
 // TODO: リツイート、いいね機能、アバター画像後に削除する
@@ -32,8 +33,9 @@ const initialPost: Post = {
   tweet: 'This is a sample tweet from Alice.',
   imageUrl: 'https://source.unsplash.com/random',
   isRetweeted: false,
+  isFavorited: false,
   retweets: 5,
-  likes: 20,
+  favorites: 20,
 }
 
 export const TimeLine: React.FC = () => {
@@ -68,8 +70,9 @@ export const TimeLine: React.FC = () => {
               tweet: tweet.tweet,
               imageUrl: tweet.imageUrl,
               isRetweeted: tweet.isRetweeted,
+              isFavorited: tweet.isFavorited,
               retweets: tweet.retweets,
-              likes: tweet.likes,
+              favorites: tweet.favorites,
             }
           })
           setPosts(resPosts)
