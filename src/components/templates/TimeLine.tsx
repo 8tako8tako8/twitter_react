@@ -16,24 +16,9 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
-}
-
-// TODO: リツイート、いいね機能、アバター画像後に削除する
-const initialPost: Post = {
-  id: 1,
-  user: {
-    id: 'u1',
-    name: 'aliiiiii1',
-    nickname: 'Alice',
-    avatarImageUrl: '/path/to/avatar1.png',
-  },
-  tweet: 'This is a sample tweet from Alice.',
-  imageUrl: 'https://source.unsplash.com/random',
-  isRetweeted: false,
-  retweets: 5,
-  likes: 20,
+  favorites: number
 }
 
 export const TimeLine: React.FC = () => {
@@ -60,18 +45,7 @@ export const TimeLine: React.FC = () => {
       .then((res) => {
         if (res && res.data) {
           setTotalPages((res.data.pagination.totalPages as number) || 1)
-          const resPosts: Post[] = (res.data.tweets as Post[]).map((tweet) => {
-            return {
-              ...initialPost,
-              id: tweet.id,
-              user: tweet.user,
-              tweet: tweet.tweet,
-              imageUrl: tweet.imageUrl,
-              isRetweeted: tweet.isRetweeted,
-              retweets: tweet.retweets,
-              likes: tweet.likes,
-            }
-          })
+          const resPosts: Post[] = res.data.tweets
           setPosts(resPosts)
         }
       })

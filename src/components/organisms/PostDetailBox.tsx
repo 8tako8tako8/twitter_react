@@ -11,6 +11,7 @@ import { getPost } from '../../lib/api/tweet'
 import { useParams } from 'react-router-dom'
 import { Loading } from '../pages/Loading'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
+import { cancelFavorite, favorite } from '../../lib/api/favorite'
 
 type Post = {
   id: number
@@ -23,28 +24,13 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
-}
-
-// TODO: リツイート、いいね機能、アバター画像追加後に削除する
-const initialPost: Post = {
-  id: 1,
-  user: {
-    id: 'u1',
-    name: 'aliiiiii1',
-    nickname: 'Alice',
-    avatarUrl: '/path/to/avatar1.png',
-  },
-  tweet: 'This is a sample tweet from Alice.',
-  imageUrl: 'https://source.unsplash.com/random',
-  isRetweeted: false,
-  retweets: 5,
-  likes: 20,
+  favorites: number
 }
 
 export const PostDetailBox: React.FC = () => {
-  const [post, setPost] = useState<Post>(initialPost)
+  const [post, setPost] = useState<Post>()
   const [loading, setLoading] = useState<boolean>(false)
 
   const { tweetId } = useParams()
@@ -56,13 +42,14 @@ export const PostDetailBox: React.FC = () => {
       .then((res) => {
         if (res && res.data) {
           const resPost: Post = {
-            ...initialPost,
             id: res.data.id,
             user: res.data.user,
             tweet: res.data.tweet,
             imageUrl: res.data.imageUrl,
             isRetweeted: res.data.isRetweeted,
+            isFavorited: res.data.isFavorited,
             retweets: res.data.retweets,
+            favorites: res.data.favorites,
           }
           setPost(resPost)
         }
@@ -76,6 +63,8 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleRetweet = () => {
+    if (!post) return
+
     retweet(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイートに失敗しました')
@@ -88,11 +77,41 @@ export const PostDetailBox: React.FC = () => {
   }
 
   const handleCancelRetweet = () => {
+    if (!post) return
+
     cancelRetweet(post.id)
       .then((res) => {
         if (res.status != 200) throw new Error('リツイート解除に失敗しました')
 
         setPost({ ...post, isRetweeted: false, retweets: post.retweets - 1 })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleFavorite = () => {
+    if (!post) return
+
+    favorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイートに失敗しました')
+
+        setPost({ ...post, isFavorited: true, favorites: post.favorites + 1 })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelFavorite = () => {
+    if (!post) return
+
+    cancelFavorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('リツイート解除に失敗しました')
+
+        setPost({ ...post, isFavorited: false, favorites: post.favorites - 1 })
       })
       .catch((err) => {
         console.error(err)
@@ -117,35 +136,45 @@ export const PostDetailBox: React.FC = () => {
           <div className="postHeader">
             <div className="postHeaderText">
               <h3>
-                {post.user.nickname}
+                {post?.user.nickname}
                 <span className="postHeaderSpecial">
                   <VerifiedUser className="postBadge" />
-                  {post.user.name}
+                  {post?.user.name}
                 </span>
               </h3>
             </div>
             <div className="postHeaderDescription">
-              <p>{post.tweet}</p>
+              <p>{post?.tweet}</p>
             </div>
           </div>
-          {post.imageUrl && <img src={post.imageUrl} />}
+          {post?.imageUrl && <img src={post?.imageUrl} />}
           <div className="postReaction">
-            <span>{post.retweets} 件のリツイート</span>
-            <span>{post.likes} 件のいいね</span>
+            <span>{post?.retweets} 件のリツイート</span>
+            <span>{post?.favorites} 件のいいね</span>
           </div>
           <div className="postFooter">
             <ChatBubbleOutline fontSize="small" />
-            {post.isRetweeted && (
+            {post?.isRetweeted && (
               <RetweetIcon
                 fontSize="small"
                 color="primary"
                 onClick={handleCancelRetweet}
               />
             )}
-            {!post.isRetweeted && (
+            {!post?.isRetweeted && (
               <RetweetIcon fontSize="small" onClick={handleRetweet} />
             )}
-            <FavoriteBorder fontSize="small" />
+            {post?.isFavorited && (
+              <FavoriteIcon
+                fontSize="small"
+                color="error"
+                onClick={handleCancelFavorite}
+              />
+            )}
+            {!post?.isFavorited && (
+              <FavoriteIcon fontSize="small" onClick={handleFavorite} />
+            )}
+            {/* <FavoriteBorder fontSize="small" /> */}
           </div>
         </div>
       </div>
@@ -231,5 +260,9 @@ const StyledPostDetailBox = styled.div`
 `
 
 const RetweetIcon = styled(Repeat)`
+  cursor: pointer;
+`
+
+const FavoriteIcon = styled(FavoriteBorder)`
   cursor: pointer;
 `

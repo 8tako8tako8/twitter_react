@@ -35,8 +35,9 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
+  favorites: number
 }
 
 type Profile = User & {

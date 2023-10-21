@@ -12,6 +12,7 @@ import { deletePost } from '../../lib/api/tweet'
 import { FlashMessage } from './FlashMessage'
 import { DropDownMenu } from './DropDownMenu'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
+import { cancelFavorite, favorite } from '../../lib/api/favorite'
 
 type Post = {
   id: number
@@ -24,8 +25,9 @@ type Post = {
   tweet: string
   imageUrl: string
   isRetweeted: boolean
+  isFavorited: boolean
   retweets: number
-  likes: number
+  favorites: number
 }
 
 type Props = {
@@ -41,7 +43,9 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
   const [openSuccessMessage, setOpenSuccessMessage] = useState(false)
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const [isRetweeted, setIsRetweeted] = useState(post.isRetweeted)
+  const [isFavorited, setIsFavorited] = useState(post.isFavorited)
   const [retweets, setRetweets] = useState(post.retweets)
+  const [favorites, setFavorites] = useState(post.favorites)
 
   const anchorRef = useRef<HTMLButtonElement>(null)
 
@@ -66,7 +70,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('リツイートに失敗しました')
 
         setIsRetweeted(true)
-        setRetweets(retweets + 1)
+        setRetweets((prevRetweets) => prevRetweets + 1)
       })
       .catch((err) => {
         console.error(err)
@@ -79,7 +83,33 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('リツイート解除に失敗しました')
 
         setIsRetweeted(false)
-        setRetweets(retweets - 1)
+        if (retweets > 0) setRetweets((prevRetweets) => prevRetweets - 1)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleFavorite = () => {
+    favorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('いいねに失敗しました')
+
+        setIsFavorited(true)
+        setFavorites((prevFavorites) => prevFavorites + 1)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelFavorite = () => {
+    cancelFavorite(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('いいね解除に失敗しました')
+
+        setIsFavorited(false)
+        if (favorites > 0) setFavorites((prevFavorites) => prevFavorites - 1)
       })
       .catch((err) => {
         console.error(err)
@@ -166,7 +196,24 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
                 </>
               )}
             </RetweetBlock>
-            <FavoriteBorder fontSize="small" />
+            <FavoriteBlock>
+              {!isFavorited && (
+                <>
+                  <FavoriteIcon fontSize="small" onClick={handleFavorite} />
+                  <FavoriteCountInactive>{favorites}</FavoriteCountInactive>
+                </>
+              )}
+              {isFavorited && (
+                <>
+                  <FavoriteIcon
+                    fontSize="small"
+                    color="error"
+                    onClick={handleCancelFavorite}
+                  />
+                  <FavoriteCountActive>{favorites}</FavoriteCountActive>
+                </>
+              )}
+            </FavoriteBlock>
           </PostFooter>
         </PostCardBody>
       </PostCard>
@@ -265,5 +312,23 @@ const RetweetCountActive = styled.span`
 `
 
 const RetweetCountInactive = styled.span`
+  margin-left: 5px;
+`
+
+const FavoriteBlock = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const FavoriteIcon = styled(FavoriteBorder)`
+  cursor: pointer;
+`
+
+const FavoriteCountActive = styled.span`
+  margin-left: 5px;
+  color: red;
+`
+
+const FavoriteCountInactive = styled.span`
   margin-left: 5px;
 `
