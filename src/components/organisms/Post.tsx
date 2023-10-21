@@ -70,7 +70,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('リツイートに失敗しました')
 
         setIsRetweeted(true)
-        setRetweets(retweets + 1)
+        setRetweets((prevRetweets) => prevRetweets + 1)
       })
       .catch((err) => {
         console.error(err)
@@ -83,7 +83,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('リツイート解除に失敗しました')
 
         setIsRetweeted(false)
-        setRetweets(retweets - 1)
+        setRetweets((prevRetweets) => prevRetweets - 1)
       })
       .catch((err) => {
         console.error(err)
@@ -96,7 +96,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('いいねに失敗しました')
 
         setIsFavorited(true)
-        setFavorites(favorites + 1)
+        setFavorites((prevFavorites) => prevFavorites + 1)
       })
       .catch((err) => {
         console.error(err)
@@ -109,7 +109,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         if (res.status != 200) throw new Error('いいね解除に失敗しました')
 
         setIsFavorited(false)
-        setFavorites(retweets - 1)
+        setFavorites((prevFavorites) => prevFavorites - 1)
       })
       .catch((err) => {
         console.error(err)
