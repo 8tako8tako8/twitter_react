@@ -22,6 +22,7 @@ type User = {
   introduction: string
   avatarImageUrl: string
   headerImageUrl: string
+  isFollowing: boolean
 }
 
 type Post = {

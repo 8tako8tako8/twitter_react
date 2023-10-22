@@ -17,6 +17,7 @@ type User = {
   introduction: string
   avatarImageUrl: string
   headerImageUrl: string
+  isFollowing: boolean
 }
 
 // TODO: リツイート、いいね機能、アバター画像後に削除する
@@ -30,6 +31,7 @@ const initialUser: User = {
   introduction: 'よろしくお願いします！',
   avatarImageUrl: 'https://source.unsplash.com/random',
   headerImageUrl: 'https://source.unsplash.com/random',
+  isFollowing: false,
 }
 
 type Post = {
@@ -87,6 +89,7 @@ export const Profile: React.FC = () => {
             introduction,
             avatarImageUrl,
             headerImageUrl,
+            isFollowing,
           } = res.data
           const resProfile: Profile = {
             ...initialUser,
@@ -99,6 +102,7 @@ export const Profile: React.FC = () => {
             introduction: introduction,
             avatarImageUrl: avatarImageUrl,
             headerImageUrl: headerImageUrl,
+            isFollowing: isFollowing,
           }
           setProfile(resProfile)
 
