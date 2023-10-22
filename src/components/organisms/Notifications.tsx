@@ -3,8 +3,9 @@ import { Pagination } from '@mui/material'
 import styled from 'styled-components'
 import { Loading } from '../pages/Loading'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Notification } from './Notification'
+import { getNotifications } from '../../lib/api/notification'
 
 type Notification = {
   id: number
@@ -65,7 +66,39 @@ export const Notifications: React.FC = () => {
   ) => {
     setCurrentPage(page)
     navigate({ ...location, search: `?page=${page}` })
-    // TODO: 通知一覧を取得する処理を追加する
+    handleGetNotifications(page)
+  }
+
+  const handleGetNotifications = (page: number) => {
+    setLoading(true)
+
+    getNotifications(page)
+      .then((res) => {
+        if (res && res.data) {
+          setTotalPages((res.data.pagination.totalPages as number) || 1)
+          const resNotifications: Notification[] = res.data.notifications
+          setNotifications(resNotifications)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    //  クエリパラメータからpageを取得する
+    const queryParams = new URLSearchParams(location.search)
+    const page = Number(queryParams.get('page')) || 1
+
+    setCurrentPage(page)
+    handleGetNotifications(page)
+  }, [location.search])
+
+  if (loading) {
+    return <Loading />
   }
 
   if (loading) {
