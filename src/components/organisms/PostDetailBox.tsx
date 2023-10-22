@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom'
 import { Loading } from '../pages/Loading'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
 import { cancelFavorite, favorite } from '../../lib/api/favorite'
+import { Link } from 'react-router-dom'
 
 type Post = {
   id: number
@@ -28,6 +29,8 @@ type Post = {
   retweets: number
   favorites: number
 }
+
+const homeUrl = process.env.PUBLIC_URL
 
 export const PostDetailBox: React.FC = () => {
   const [post, setPost] = useState<Post>()
@@ -134,15 +137,17 @@ export const PostDetailBox: React.FC = () => {
         </div>
         <div className="postBody">
           <div className="postHeader">
-            <div className="postHeaderText">
-              <h3>
-                {post?.user.nickname}
-                <span className="postHeaderSpecial">
-                  <VerifiedUser className="postBadge" />
-                  {post?.user.name}
-                </span>
-              </h3>
-            </div>
+            <ProfileLink to={`${homeUrl}/users/${post?.user.id}`}>
+              <div className="postHeaderText">
+                <h3>
+                  {post?.user.nickname}
+                  <span className="postHeaderSpecial">
+                    <VerifiedUser className="postBadge" />
+                    {post?.user.name}
+                  </span>
+                </h3>
+              </div>
+            </ProfileLink>
             <div className="postHeaderDescription">
               <p>{post?.tweet}</p>
             </div>
@@ -257,6 +262,11 @@ const StyledPostDetailBox = styled.div`
   .postAvatar {
     padding: 15px;
   }
+`
+
+const ProfileLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `
 
 const RetweetIcon = styled(Repeat)`
