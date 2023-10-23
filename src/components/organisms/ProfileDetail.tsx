@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
 import { ProfileSubInfo } from './ProfileSubInfo'
+import { follow, unfollow } from '../../lib/api/follow'
 
 type User = {
   id: number
@@ -17,6 +18,7 @@ type User = {
   introduction: string
   avatarImageUrl: string
   headerImageUrl: string
+  isFollowing: boolean
 }
 
 type Post = {
@@ -54,6 +56,40 @@ export const ProfileDetail: React.FC<Props> = ({
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen)
+  }
+
+  const handleFollow = () => {
+    follow(profile.id)
+      .then((res) => {
+        if (res.status != 204) throw new Error('フォローに失敗しました')
+
+        setProfile((prevProfile) => {
+          return {
+            ...prevProfile,
+            isFollowing: true,
+          }
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleUnfollow = () => {
+    unfollow(profile.id)
+      .then((res) => {
+        if (res.status != 204) throw new Error('フォロー解除に失敗しました')
+
+        setProfile((prevProfile) => {
+          return {
+            ...prevProfile,
+            isFollowing: false,
+          }
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   const PROFILE_SUB_INFO_LIST = [
@@ -103,6 +139,14 @@ export const ProfileDetail: React.FC<Props> = ({
               >
                 プロフィールを編集する
               </Button>
+            )}
+            {!myself && !profile.isFollowing && (
+              <FollowButton onClick={handleFollow}>フォローする</FollowButton>
+            )}
+            {!myself && profile.isFollowing && (
+              <UnfollowButton onClick={handleUnfollow}>
+                フォロー中
+              </UnfollowButton>
             )}
           </div>
           <h3>
@@ -206,4 +250,26 @@ const StyledProfileDetail = styled.div`
     align-items: center;
     color: gray;
   }
+`
+
+const FollowButton = styled(Button)`
+  background-color: var(--twitter-color) !important;
+  color: white !important;
+  font-weight: 900 !important;
+  width: 180px !important;
+  height: 40px !important;
+  border-radius: 30px !important;
+  margin-left: auto !important;
+  margin-right: 10px !important;
+`
+
+const UnfollowButton = styled(Button)`
+  background-color: gray !important;
+  color: white !important;
+  font-weight: 900 !important;
+  width: 180px !important;
+  height: 40px !important;
+  border-radius: 30px !important;
+  margin-left: auto !important;
+  margin-right: 10px !important;
 `

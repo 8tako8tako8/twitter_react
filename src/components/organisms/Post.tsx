@@ -152,11 +152,13 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         <PostCardBody>
           <PostCardBodyTop>
             <PostCardBodyTopContents>
-              <PostCardHeaderName>
-                {post.user.nickname}
-                <VerifiedUserBadge />
-                <AccountName>{post.user.name}</AccountName>
-              </PostCardHeaderName>
+              <ProfileLink to={`${homeUrl}/users/${post.user.id}`}>
+                <PostCardHeaderName>
+                  {post.user.nickname}
+                  <VerifiedUserBadge />
+                  <AccountName>{post.user.name}</AccountName>
+                </PostCardHeaderName>
+              </ProfileLink>
               {myself && (
                 <DropDownMenu
                   open={openMenu}
@@ -254,6 +256,11 @@ const PostCardBodyTop = styled.div``
 const PostCardBodyTopContents = styled.div`
   display: flex;
   justify-content: space-between;
+`
+
+const ProfileLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `
 
 const PostCardHeaderName = styled.h3`
