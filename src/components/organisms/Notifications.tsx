@@ -101,10 +101,6 @@ export const Notifications: React.FC = () => {
     return <Loading />
   }
 
-  if (loading) {
-    return <Loading />
-  }
-
   return (
     <StyledNotifications>
       <NotificationHeader>
