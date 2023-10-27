@@ -23,7 +23,7 @@ export const PostDetail: React.FC = () => {
 const StyledPostDetail = styled.div`
   display: flex;
   height: 100vh;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 10px;
 
@@ -36,7 +36,7 @@ const StyledPostDetail = styled.div`
   }
 
   .post {
-    min-width: 600px;
+    min-width: 700px;
     border-right: 1px solid var(--twitter-background);
     overflow-y: scroll;
   }
