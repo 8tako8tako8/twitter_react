@@ -18,8 +18,19 @@ type Group = {
   user: User
 }
 
+const initialGroup: Group = {
+  id: 0,
+  user: {
+    id: 0,
+    name: '',
+    nickname: '',
+    avatarImageUrl: '',
+  },
+}
+
 export const DirectMessage: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([])
+  const [selectedGroup, setSelectedGroup] = useState<Group>(initialGroup)
 
   const handleGetGroups = () => {
     getGroups()
@@ -43,14 +54,22 @@ export const DirectMessage: React.FC = () => {
       </SideBarBlock>
       <DirectMessageBlock>
         <GroupBlock>
-          <Groups groups={groups} />
+          <Groups
+            groups={groups}
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+          />
         </GroupBlock>
         <MessageBlock>
-          <MessageHeader>
-            <h2>Group Name</h2>
-          </MessageHeader>
-          <Messages />
-          <MessageBox />
+          {selectedGroup.id !== 0 && (
+            <>
+              <MessageHeader>
+                <h2>{selectedGroup.user.nickname}</h2>
+              </MessageHeader>
+              <Messages />
+              <MessageBox />
+            </>
+          )}
         </MessageBlock>
       </DirectMessageBlock>
     </StyledDirectMessage>

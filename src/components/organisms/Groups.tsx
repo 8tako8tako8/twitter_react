@@ -16,13 +16,24 @@ type Group = {
 
 type Props = {
   groups: Group[]
+  selectedGroup: Group
+  setSelectedGroup: React.Dispatch<React.SetStateAction<Group>>
 }
 
-export const Groups: React.FC<Props> = ({ groups }) => {
+export const Groups: React.FC<Props> = ({
+  groups,
+  selectedGroup,
+  setSelectedGroup,
+}) => {
   return (
     <StyledGroups>
       {groups.map((group) => (
-        <Group key={group.id} group={group} />
+        <Group
+          key={group.id}
+          group={group}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+        />
       ))}
     </StyledGroups>
   )
