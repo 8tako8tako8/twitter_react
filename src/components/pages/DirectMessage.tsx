@@ -3,8 +3,39 @@ import { SideBar } from '../templates/SideBar'
 import { Groups } from '../organisms/Groups'
 import { Messages } from '../organisms/Messages'
 import { MessageBox } from '../organisms/MessageBox'
+import { useEffect, useState } from 'react'
+import { getGroups } from '../../lib/api/group'
+
+type User = {
+  id: number
+  name: string
+  nickname: string
+  avatarImageUrl: string
+}
+
+type Group = {
+  id: number
+  user: User
+}
 
 export const DirectMessage: React.FC = () => {
+  const [groups, setGroups] = useState<Group[]>([])
+
+  const handleGetGroups = () => {
+    getGroups()
+      .then((res) => {
+        const resGroups: Group[] = res.data.groups
+        setGroups(resGroups)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    handleGetGroups()
+  }, [])
+
   return (
     <StyledDirectMessage>
       <SideBarBlock>
@@ -12,7 +43,7 @@ export const DirectMessage: React.FC = () => {
       </SideBarBlock>
       <DirectMessageBlock>
         <GroupBlock>
-          <Groups />
+          <Groups groups={groups} />
         </GroupBlock>
         <MessageBlock>
           <MessageHeader>

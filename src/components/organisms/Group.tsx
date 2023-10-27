@@ -1,17 +1,35 @@
 import React from 'react'
 import { styled } from 'styled-components'
 
-export const Group: React.FC = () => {
-  const nickName = 'aaaabbbbxx'
+type User = {
+  id: number
+  name: string
+  nickname: string
+  avatarImageUrl: string
+}
 
+type Group = {
+  id: number
+  user: User
+}
+
+type Props = {
+  group: Group
+}
+
+export const Group: React.FC<Props> = ({ group }) => {
   return (
     <StyledGroup>
       <GroupCard>
         <AvatarImageBlock>
-          {true && <AvatarImage src="https://source.unsplash.com/random" />}
+          {group.user.avatarImageUrl ? (
+            <AvatarImage src={group.user.avatarImageUrl} />
+          ) : (
+            <AvatarImage src={`${process.env.PUBLIC_URL}/no_image.png`} />
+          )}
         </AvatarImageBlock>
         <GroupCardBody>
-          <GroupCardName>{nickName}</GroupCardName>
+          <GroupCardName>{group.user.nickname}</GroupCardName>
         </GroupCardBody>
       </GroupCard>
     </StyledGroup>
