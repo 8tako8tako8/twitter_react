@@ -1,13 +1,27 @@
 import React from 'react'
 import { styled } from 'styled-components'
+import { useAppSelector } from '../../App'
 
-type Props = {
-  myself: boolean
+type Message = {
+  id: number
+  message: string
+  user: {
+    id: number
+    name: string
+    nickname: string
+    avatarImageUrl: string
+  }
+  createdAt: string
+  updatedAt: string
 }
 
-export const Message: React.FC<Props> = ({ myself }) => {
-  const message =
-    'ああああああああああああああああああああああああああああああああああああああああああああああ'
+type Props = {
+  message: Message
+}
+
+export const Message: React.FC<Props> = ({ message }) => {
+  const myUserId = useAppSelector((state) => state.user.userInfo?.id)
+  const myself = message.user.id === myUserId
 
   return (
     <StyledMessage>
@@ -15,14 +29,14 @@ export const Message: React.FC<Props> = ({ myself }) => {
         {myself && (
           <MyMessageBlock>
             <MyMessageContainer>
-              <MyMessage>{message}</MyMessage>
+              <MyMessage>{message.message}</MyMessage>
             </MyMessageContainer>
           </MyMessageBlock>
         )}
         {!myself && (
           <YourMessageBlock>
             <YourMessageContainer>
-              <YourMessage>{message}</YourMessage>
+              <YourMessage>{message.message}</YourMessage>
             </YourMessageContainer>
           </YourMessageBlock>
         )}

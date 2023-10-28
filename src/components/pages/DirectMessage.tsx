@@ -66,7 +66,7 @@ export const DirectMessage: React.FC = () => {
               <MessageHeader>
                 <h2>{selectedGroup.user.nickname}</h2>
               </MessageHeader>
-              <Messages />
+              <Messages selectedGroup={selectedGroup} />
               <MessageBox />
             </>
           )}
