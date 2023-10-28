@@ -19,7 +19,7 @@ export const Home: React.FC = () => {
 const StyledHome = styled.div`
   display: flex;
   height: 100vh;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 10px;
 
@@ -32,7 +32,7 @@ const StyledHome = styled.div`
   }
 
   .timeLine {
-    min-width: 600px;
+    min-width: 700px;
     border-right: 1px solid var(--twitter-background);
     overflow-y: scroll;
   }

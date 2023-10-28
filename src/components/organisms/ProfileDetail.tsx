@@ -7,6 +7,8 @@ import { styled } from 'styled-components'
 import { ProfileDetailModal } from './ProfileDetailModal'
 import { ProfileSubInfo } from './ProfileSubInfo'
 import { follow, unfollow } from '../../lib/api/follow'
+import { findOrCreateGroup } from '../../lib/api/group'
+import { useNavigate } from 'react-router-dom'
 
 type User = {
   id: number
@@ -47,12 +49,16 @@ type Props = {
   myself: boolean
 }
 
+const homeUrl = process.env.PUBLIC_URL
+
 export const ProfileDetail: React.FC<Props> = ({
   profile,
   setProfile,
   myself,
 }) => {
   const [isModalOpen, setModalOpen] = useState(false)
+
+  const navigate = useNavigate()
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen)
@@ -86,6 +92,25 @@ export const ProfileDetail: React.FC<Props> = ({
             isFollowing: false,
           }
         })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleFindMessageGroup = () => {
+    findOrCreateGroup(profile.id)
+      .then((res) => {
+        if (res.status !== 200)
+          throw new Error('メッセージグループの取得に失敗しました')
+
+        if (res && res.data) {
+          const group_id = res.data.group.id
+          navigate({
+            pathname: `${homeUrl}/messages`,
+            search: `?group_id=${group_id}`,
+          })
+        }
       })
       .catch((err) => {
         console.error(err)
@@ -132,22 +157,36 @@ export const ProfileDetail: React.FC<Props> = ({
                 <img src={`${process.env.PUBLIC_URL}/no_image.png`} />
               )}
             </div>
-            {myself && (
-              <Button
-                className="profileBodyTopEditButton"
-                onClick={toggleModal}
-              >
-                プロフィールを編集する
-              </Button>
-            )}
-            {!myself && !profile.isFollowing && (
-              <FollowButton onClick={handleFollow}>フォローする</FollowButton>
-            )}
-            {!myself && profile.isFollowing && (
-              <UnfollowButton onClick={handleUnfollow}>
-                フォロー中
-              </UnfollowButton>
-            )}
+
+            <ButtonBlock>
+              <PersonalButtonBlock>
+                {myself && (
+                  <Button
+                    className="profileBodyTopEditButton"
+                    onClick={toggleModal}
+                  >
+                    プロフィールを編集する
+                  </Button>
+                )}
+                {!myself && (
+                  <MessageButton onClick={handleFindMessageGroup}>
+                    メッセージを送る
+                  </MessageButton>
+                )}
+              </PersonalButtonBlock>
+              <FollowButtonBlock>
+                {!myself && !profile.isFollowing && (
+                  <FollowButton onClick={handleFollow}>
+                    フォローする
+                  </FollowButton>
+                )}
+                {!myself && profile.isFollowing && (
+                  <UnfollowButton onClick={handleUnfollow}>
+                    フォロー中
+                  </UnfollowButton>
+                )}
+              </FollowButtonBlock>
+            </ButtonBlock>
           </div>
           <h3>
             {profile.nickname}
@@ -206,7 +245,7 @@ const StyledProfileDetail = styled.div`
 
   .profileBodyTop {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
   }
 
   .profileBodyTopEditButton {
@@ -250,6 +289,26 @@ const StyledProfileDetail = styled.div`
     align-items: center;
     color: gray;
   }
+`
+
+const ButtonBlock = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const PersonalButtonBlock = styled.div``
+
+const FollowButtonBlock = styled.div``
+
+const MessageButton = styled(Button)`
+  background-color: black !important;
+  color: white !important;
+  font-weight: 900 !important;
+  width: 180px !important;
+  height: 40px !important;
+  border-radius: 30px !important;
+  margin-left: auto !important;
+  margin-right: 10px !important;
 `
 
 const FollowButton = styled(Button)`
