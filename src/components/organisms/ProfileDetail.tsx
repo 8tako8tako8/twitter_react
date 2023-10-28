@@ -98,6 +98,25 @@ export const ProfileDetail: React.FC<Props> = ({
       })
   }
 
+  const handleFindMessageGroup = () => {
+    findOrCreateGroup(profile.id)
+      .then((res) => {
+        if (res.status !== 200)
+          throw new Error('メッセージグループの取得に失敗しました')
+
+        if (res && res.data) {
+          const group_id = res.data.group.id
+          navigate({
+            pathname: `${homeUrl}/messages`,
+            search: `?group_id=${group_id}`,
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
   const PROFILE_SUB_INFO_LIST = [
     {
       class: 'profileBodySubInfoLocation',

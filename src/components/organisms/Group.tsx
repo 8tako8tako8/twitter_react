@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 
 type User = {
@@ -24,7 +25,10 @@ export const Group: React.FC<Props> = ({
   selectedGroup,
   setSelectedGroup,
 }) => {
+  const navigate = useNavigate()
+
   const handleSetSelectedGroup = () => {
+    navigate({ ...location, search: `?group_id=${group.id}` })
     setSelectedGroup(group)
   }
 

@@ -73,6 +73,24 @@ export const DirectMessage: React.FC = () => {
     handleGetGroups()
   }, [])
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search)
+    const paramsGroupId = Number(queryParams.get('group_id')) || 0
+
+    console.log(paramsGroupId)
+    console.log(groups)
+
+    if (paramsGroupId !== 0) {
+      const newSelectedGroup = groups.find(
+        (group) => group.id === paramsGroupId
+      )
+
+      if (newSelectedGroup) {
+        setSelectedGroup(newSelectedGroup)
+      }
+    }
+  }, [groups])
+
   return (
     <StyledDirectMessage>
       <SideBarBlock>

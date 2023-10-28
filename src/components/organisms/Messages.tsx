@@ -15,14 +15,16 @@ type Message = {
   updatedAt: string
 }
 
+type User = {
+  id: number
+  name: string
+  nickname: string
+  avatarImageUrl: string
+}
+
 type Group = {
   id: number
-  user: {
-    id: number
-    name: string
-    nickname: string
-    avatarImageUrl: string
-  }
+  user: User
 }
 
 type Props = {
