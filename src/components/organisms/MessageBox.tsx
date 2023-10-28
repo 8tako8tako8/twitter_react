@@ -1,19 +1,50 @@
 import { Button } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
+import { sendMessage } from '../../lib/api/message'
+import { validateDirectMessage } from '../../validators/messageValidator'
 
-export const MessageBox: React.FC = () => {
-  const [message, setMessage] = useState('')
+type Props = {
+  groupId: number
+  handleGetMessages: (groupId: number) => void
+}
+
+export const MessageBox: React.FC<Props> = ({ groupId, handleGetMessages }) => {
+  const [directMessage, setDirectMessage] = useState('')
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const validationError = validateDirectMessage(directMessage)
+    if (validationError) {
+      // setErrorMessage(validationError)
+      return
+    }
+
+    sendMessage(directMessage, groupId)
+      .then((res) => {
+        if (res.status != 201) throw new Error('に失敗しました')
+
+        setDirectMessage('')
+        // setErrorMessage('')
+
+        handleGetMessages(groupId)
+      })
+      .catch((err) => {
+        // setErrorMessage((err.message || err) as string)
+        console.error(err)
+      })
+  }
 
   return (
     <StyledMessageBox>
       <MessageCard>
-        <MessageForm>
+        <MessageForm onSubmit={handleSendMessage}>
           <MessageInputBlock>
             <MessageTextArea
-              value={message}
+              value={directMessage}
               placeholder="メッセージを投稿"
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => setDirectMessage(e.target.value)}
             />
           </MessageInputBlock>
           <MessageButton type="submit">送信</MessageButton>
