@@ -31,3 +31,8 @@ export const getCurrentUser = () => {
     },
   })
 }
+
+// 退会
+export const withdrawal = () => {
+  return client.delete('users')
+}
