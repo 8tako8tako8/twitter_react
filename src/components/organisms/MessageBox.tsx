@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { sendMessage } from '../../lib/api/message'
 import { validateDirectMessage } from '../../validators/messageValidator'
@@ -37,6 +37,11 @@ export const MessageBox: React.FC<Props> = ({ groupId, handleGetMessages }) => {
         console.error(err)
       })
   }
+
+  useEffect(() => {
+    setDirectMessage('')
+    setErrorMessage('')
+  }, [groupId])
 
   return (
     <StyledMessageBox>
