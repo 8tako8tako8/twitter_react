@@ -59,6 +59,8 @@ const MyMessageContainer = styled.div`
   padding: 5px 10px;
   margin: 5px;
   background-color: var(--twitter-color);
+  max-width: 200px;
+  word-wrap: break-word;
 `
 
 const YourMessageBlock = styled.div`
@@ -73,6 +75,8 @@ const YourMessageContainer = styled.div`
   border-radius: 10px;
   padding: 5px 10px;
   margin: 5px;
+  max-width: 200px;
+  word-wrap: break-word;
 `
 
 const MyMessage = styled.h3`
