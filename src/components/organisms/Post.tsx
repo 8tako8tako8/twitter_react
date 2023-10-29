@@ -1,8 +1,9 @@
 import {
-  ChatBubbleOutline,
   FavoriteBorder,
   Repeat,
   VerifiedUser,
+  BookmarkBorder,
+  Bookmark,
 } from '@mui/icons-material'
 import { MenuItem } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
@@ -13,6 +14,7 @@ import { FlashMessage } from './FlashMessage'
 import { DropDownMenu } from './DropDownMenu'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
 import { cancelFavorite, favorite } from '../../lib/api/favorite'
+import { bookmark, cancelBookmark } from '../../lib/api/bookmark'
 
 type Post = {
   id: number
@@ -26,6 +28,7 @@ type Post = {
   imageUrl: string
   isRetweeted: boolean
   isFavorited: boolean
+  isBookmarked: boolean
   retweets: number
   favorites: number
 }
@@ -44,6 +47,7 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
   const [openErrorMessage, setOpenErrorMessage] = useState(false)
   const [isRetweeted, setIsRetweeted] = useState(post.isRetweeted)
   const [isFavorited, setIsFavorited] = useState(post.isFavorited)
+  const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
   const [retweets, setRetweets] = useState(post.retweets)
   const [favorites, setFavorites] = useState(post.favorites)
 
@@ -62,6 +66,30 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
         setOpenErrorMessage(true)
       })
     setOpenMenu(false)
+  }
+
+  const handleBookmark = () => {
+    bookmark(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ブックマークに失敗しました')
+
+        setIsBookmarked(true)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelBookmark = () => {
+    cancelBookmark(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ブックマーク解除に失敗しました')
+
+        setIsBookmarked(false)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   const handleRetweet = () => {
@@ -179,7 +207,14 @@ export const Post: React.FC<Props> = ({ post, myself, handleGetProfile }) => {
           </PostCardBodyTop>
           {post.imageUrl && <PostImage src={post.imageUrl} />}
           <PostFooter>
-            <ChatBubbleOutline fontSize="small" />
+            <BookmarkBlock>
+              {!isBookmarked && (
+                <BookmarkBorderIcon fontSize="small" onClick={handleBookmark} />
+              )}
+              {isBookmarked && (
+                <BookmarkIcon fontSize="small" onClick={handleCancelBookmark} />
+              )}
+            </BookmarkBlock>
             <RetweetBlock>
               {!isRetweeted && (
                 <>
@@ -302,6 +337,16 @@ const PostFooter = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
   margin-right: 10px;
+`
+
+const BookmarkBlock = styled.div``
+
+const BookmarkIcon = styled(Bookmark)`
+  cursor: pointer;
+`
+
+const BookmarkBorderIcon = styled(BookmarkBorder)`
+  cursor: pointer;
 `
 
 const RetweetBlock = styled.div`

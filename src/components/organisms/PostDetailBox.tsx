@@ -1,5 +1,6 @@
 import {
-  ChatBubbleOutline,
+  Bookmark,
+  BookmarkBorder,
   FavoriteBorder,
   Repeat,
   VerifiedUser,
@@ -13,6 +14,7 @@ import { Loading } from '../pages/Loading'
 import { cancelRetweet, retweet } from '../../lib/api/retweet'
 import { cancelFavorite, favorite } from '../../lib/api/favorite'
 import { Link } from 'react-router-dom'
+import { bookmark, cancelBookmark } from '../../lib/api/bookmark'
 
 type Post = {
   id: number
@@ -26,6 +28,7 @@ type Post = {
   imageUrl: string
   isRetweeted: boolean
   isFavorited: boolean
+  isBookmarked: boolean
   retweets: number
   favorites: number
 }
@@ -44,16 +47,7 @@ export const PostDetailBox: React.FC = () => {
     getPost(tweetId)
       .then((res) => {
         if (res && res.data) {
-          const resPost: Post = {
-            id: res.data.id,
-            user: res.data.user,
-            tweet: res.data.tweet,
-            imageUrl: res.data.imageUrl,
-            isRetweeted: res.data.isRetweeted,
-            isFavorited: res.data.isFavorited,
-            retweets: res.data.retweets,
-            favorites: res.data.favorites,
-          }
+          const resPost: Post = res.data
           setPost(resPost)
         }
       })
@@ -62,6 +56,34 @@ export const PostDetailBox: React.FC = () => {
       })
       .finally(() => {
         setLoading(false)
+      })
+  }
+
+  const handleBookmark = () => {
+    if (!post) return
+
+    bookmark(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ブックマークに失敗しました')
+
+        setPost({ ...post, isBookmarked: true })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const handleCancelBookmark = () => {
+    if (!post) return
+
+    cancelBookmark(post.id)
+      .then((res) => {
+        if (res.status != 200) throw new Error('ブックマーク解除に失敗しました')
+
+        setPost({ ...post, isBookmarked: false })
+      })
+      .catch((err) => {
+        console.error(err)
       })
   }
 
@@ -158,7 +180,12 @@ export const PostDetailBox: React.FC = () => {
             <span>{post?.favorites} 件のいいね</span>
           </div>
           <div className="postFooter">
-            <ChatBubbleOutline fontSize="small" />
+            {post?.isBookmarked && (
+              <BookmarkIcon fontSize="small" onClick={handleCancelBookmark} />
+            )}
+            {!post?.isBookmarked && (
+              <BookmarkBorderIcon fontSize="small" onClick={handleBookmark} />
+            )}
             {post?.isRetweeted && (
               <RetweetIcon
                 fontSize="small"
@@ -179,7 +206,6 @@ export const PostDetailBox: React.FC = () => {
             {!post?.isFavorited && (
               <FavoriteIcon fontSize="small" onClick={handleFavorite} />
             )}
-            {/* <FavoriteBorder fontSize="small" /> */}
           </div>
         </div>
       </div>
@@ -274,5 +300,13 @@ const RetweetIcon = styled(Repeat)`
 `
 
 const FavoriteIcon = styled(FavoriteBorder)`
+  cursor: pointer;
+`
+
+const BookmarkIcon = styled(Bookmark)`
+  cursor: pointer;
+`
+
+const BookmarkBorderIcon = styled(BookmarkBorder)`
   cursor: pointer;
 `

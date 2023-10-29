@@ -17,6 +17,7 @@ import { PostDetail } from './components/pages/PostDetail'
 import { Profile } from './components/pages/Profile'
 import { Notice } from './components/pages/Notice'
 import { DirectMessage } from './components/pages/DirectMessage'
+import { Bookmark } from './components/pages/Bookmark'
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
@@ -75,6 +76,10 @@ const App: React.FC = () => {
         <Route
           path={homeUrl + '/messages'}
           element={<PrivateRoute children={<DirectMessage />} />}
+        />
+        <Route
+          path={homeUrl + '/bookmarks'}
+          element={<PrivateRoute children={<Bookmark />} />}
         />
         <Route path="*" element={<Error />} />
       </Routes>

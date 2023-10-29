@@ -16,6 +16,7 @@ type Post = {
   imageUrl: string
   isRetweeted: boolean
   isFavorited: boolean
+  isBookmarked: boolean
   retweets: number
   favorites: number
 }
