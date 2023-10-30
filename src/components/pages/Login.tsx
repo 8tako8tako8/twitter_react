@@ -58,8 +58,8 @@ export const Login: React.FC = () => {
         }
       })
       .catch((err) => {
-        if (typeof err.response?.data?.errors[0] === 'string') {
-          setErrorMessage(err.response.data.errors[0])
+        if (typeof err.response?.data?.errors === 'string') {
+          setErrorMessage(err.response.data.errors as string)
         } else {
           console.error(err)
           setErrorMessage('不明なエラー。しばらく時間をおいて試してください。')

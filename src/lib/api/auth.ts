@@ -23,11 +23,16 @@ export const getCurrentUser = () => {
     return
 
   // prettier-ignore
-  return client.get('/auth/sessions', {
+  return client.get('user_session', {
     headers: {
       "access-token": Cookies.get("_access_token"),
       "client": Cookies.get("_client"),
       "uid": Cookies.get("_uid")
     },
   })
+}
+
+// 退会
+export const withdrawal = () => {
+  return client.delete('users')
 }

@@ -51,8 +51,8 @@ export const SideBarOptionList: React.FC = () => {
     {
       text: '退会',
       icon: MoreHorizIcon,
-      linkTo: `${homeUrl}/cancel`,
-      isActive: location.pathname === '/cancel',
+      linkTo: `${homeUrl}/withdrawal`,
+      isActive: location.pathname === '/withdrawal',
     },
   ]
 
