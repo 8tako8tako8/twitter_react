@@ -23,8 +23,6 @@ import { Withdrawal } from './components/pages/Withdrawal'
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 
-const homeUrl = process.env.PUBLIC_URL
-
 const App: React.FC = () => {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = React.useState<boolean>(true)
@@ -56,34 +54,34 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         {/* public route */}
-        <Route path={homeUrl + '/registration'} element={<SignUp />} />
-        <Route path={homeUrl + '/login'} element={<Login />} />
-        <Route path={homeUrl + '/confirm'} element={<Confirm />} />
+        <Route path={'/registration'} element={<SignUp />} />
+        <Route path={'/login'} element={<Login />} />
+        <Route path={'/confirm'} element={<Confirm />} />
 
         {/* private route */}
-        <Route path={homeUrl} element={<PrivateRoute children={<Home />} />} />
+        <Route path={'/'} element={<PrivateRoute children={<Home />} />} />
         <Route
-          path={homeUrl + '/tweets/:tweetId'}
+          path={'/tweets/:tweetId'}
           element={<PrivateRoute children={<PostDetail />} />}
         />
         <Route
-          path={homeUrl + '/users/:userId'}
+          path={'/users/:userId'}
           element={<PrivateRoute children={<Profile />} />}
         />
         <Route
-          path={homeUrl + '/notifications'}
+          path={'/notifications'}
           element={<PrivateRoute children={<Notice />} />}
         />
         <Route
-          path={homeUrl + '/messages'}
+          path={'/messages'}
           element={<PrivateRoute children={<DirectMessage />} />}
         />
         <Route
-          path={homeUrl + '/bookmarks'}
+          path={'/bookmarks'}
           element={<PrivateRoute children={<Bookmark />} />}
         />
         <Route
-          path={homeUrl + '/withdrawal'}
+          path={'/withdrawal'}
           element={<PrivateRoute children={<Withdrawal />} />}
         />
         <Route path="*" element={<Error />} />

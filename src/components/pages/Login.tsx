@@ -9,8 +9,6 @@ import { login } from '../../lib/api/auth'
 import { setCurrentUser } from '../../redux/userSlice'
 import { useAppDispatch } from '../../App'
 
-const homeUrl = process.env.PUBLIC_URL
-
 export const Login: React.FC = () => {
   const [loginInput, setLoginInput] = React.useState({
     email: '',
@@ -52,7 +50,7 @@ export const Login: React.FC = () => {
           setErrorMessage('')
 
           // ホーム画面に遷移させる
-          navigate(homeUrl)
+          navigate('/')
         } else {
           setErrorMessage('ログインに失敗しました')
         }
