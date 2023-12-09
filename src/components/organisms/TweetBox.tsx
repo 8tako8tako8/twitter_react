@@ -7,8 +7,6 @@ import { ErrorMessage } from './ErrorMessage'
 import { useNavigate } from 'react-router-dom'
 import { validateTweetMessage } from '../../validators/tweetValidator'
 
-const homeUrl = process.env.PUBLIC_URL
-
 type Props = {
   handleGetPosts: (page: number) => void
 }
@@ -57,7 +55,7 @@ export const TweetBox: React.FC<Props> = ({ handleGetPosts }) => {
           // 元々1ページ目にいた場合はクエリパラメータがないので意図的に再取得させる
           handleGetPosts(1)
         } else {
-          navigate(homeUrl)
+          navigate('/')
         }
       })
       .catch((err) => {

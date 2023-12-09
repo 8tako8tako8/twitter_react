@@ -6,10 +6,8 @@ type Props = {
   children: ReactNode
 }
 
-const homeUrl = process.env.PUBLIC_URL
-
 export const PrivateRoute: React.FC<Props> = (props) => {
   const { children } = props
   const isLogined = useAppSelector((state) => state.user.isLogined)
-  return isLogined ? <>{children}</> : <Navigate to={homeUrl + '/login'} />
+  return isLogined ? <>{children}</> : <Navigate to={'/login'} />
 }

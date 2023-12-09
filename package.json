@@ -2,7 +2,7 @@
   "name": "twitter_react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://8tako8tako8.github.io/twitter_react",
+  "homepage": "https://web.8tako8tako8.tech",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
